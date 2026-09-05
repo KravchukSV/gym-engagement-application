@@ -1,21 +1,21 @@
 package com.gym.engagement.app.model;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class User {
 
     @EqualsAndHashCode.Include
     private Long userId;
 
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String password;
-    private Boolean isActive;
+    private final String firstName;
+    private final String lastName;
+    private final String username;
+    private final String password;
+    private final Boolean isActive;
 
 }

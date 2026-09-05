@@ -1,18 +1,17 @@
 package com.gym.engagement.app.model;
 
-
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 public class Trainee extends User{
 
-    private LocalDate dateOfBirth;
-    private String address;
+    private final LocalDate dateOfBirth;
+    private final String address;
 
 }

@@ -1,17 +1,17 @@
 package com.gym.engagement.app.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder(toBuilder = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class TrainingType {
 
     @EqualsAndHashCode.Include
-    private Long trainingTypeId;
+    private final Long trainingTypeId;
 
-    private String trainingTypeName;
+    private final String trainingTypeName;
 
 }
