@@ -10,12 +10,12 @@ import static com.gym.engagement.app.model.EntityType.TRAINER;
 import static com.gym.engagement.app.model.EntityType.TRAINING;
 
 @Component
-public class SharedStorage {
+public class InMemoryStorage {
     private final Map<EntityType, AbstractStorage<?, ?>> storage;
 
-    public SharedStorage(TrainerStorage trainerStorage,
-                         TraineeStorage traineeStorage,
-                         TrainingStorage trainingStorage) {
+    public InMemoryStorage(TrainerStorage trainerStorage,
+                           TraineeStorage traineeStorage,
+                           TrainingStorage trainingStorage) {
         this.storage = Map.of(TRAINER, trainerStorage,
                 TRAINEE, traineeStorage,
                 TRAINING, trainingStorage);

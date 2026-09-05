@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-class SharedStorageTest {
+class InMemoryStorageTest {
 
     private final TrainerStorage trainerStorage = new TrainerStorage();
     private final TraineeStorage traineeStorage = new TraineeStorage();
     private final TrainingStorage trainingStorage = new TrainingStorage();
 
-    private final SharedStorage sharedStorage = new SharedStorage(trainerStorage,
+    private final InMemoryStorage sharedStorage = new InMemoryStorage(trainerStorage,
             traineeStorage,
             trainingStorage);
 
