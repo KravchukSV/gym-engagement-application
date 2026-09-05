@@ -1,14 +1,14 @@
 package com.gym.engagement.app.storage;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AbstractStorageTest {
 
@@ -16,48 +16,116 @@ class AbstractStorageTest {
     };
 
     @Test
-    void shouldSaveEntityAndReturnIt() {
-        String saved = storage.save("trainer-1", "Alice");
+    void shouldSaveEntity() {
+        String expected = "Alice";
 
-        assertEquals("Alice", saved);
-        assertEquals("Alice", storage.findById("trainer-1").orElseThrow());
+        String actual = storage.save("trainer-1", expected);
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void shouldRejectNullIdOrEntityOnSave() {
-        assertThrows(IllegalArgumentException.class, () -> storage.save(null, "Alice"));
-        assertThrows(IllegalArgumentException.class, () -> storage.save("trainer-1", null));
+    void shouldFindSavedEntityById() {
+        String expected = "Alice";
+        storage.save("trainer-1", expected);
+
+        Optional<String> actual = storage.findById("trainer-1");
+
+        assertEquals(Optional.of(expected), actual);
     }
 
     @Test
-    void shouldReturnEmptyOptionalWhenIdIsNullOrMissing() {
-        assertTrue(storage.findById(null).isEmpty());
-        assertTrue(storage.findById("missing-id").isEmpty());
+    void shouldRejectNullIdOnSave() {
+        Class<IllegalArgumentException> expected = IllegalArgumentException.class;
+
+        Executable actual = () -> storage.save(null, "Alice");
+
+        assertThrows(expected, actual);
+    }
+
+    @Test
+    void shouldRejectNullEntityOnSave() {
+        Class<IllegalArgumentException> expected = IllegalArgumentException.class;
+
+        Executable actual = () -> storage.save("trainer-1", null);
+
+        assertThrows(expected, actual);
+    }
+
+    @Test
+    void shouldReturnEmptyOptionalForNullId() {
+        Optional<String> expected = Optional.empty();
+
+        Optional<String> actual = storage.findById(null);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldReturnEmptyOptionalForMissingId() {
+        Optional<String> expected = Optional.empty();
+
+        Optional<String> actual = storage.findById("missing-id");
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void shouldReturnAllSavedEntities() {
+        Set<String> expected = Set.of("Alice", "Bob");
         storage.save("trainer-1", "Alice");
         storage.save("trainer-2", "Bob");
 
-        Set<String> actualValues = new HashSet<>(storage.findAll());
+        Set<String> actual = new HashSet<>(storage.findAll());
 
-        assertEquals(Set.of("Alice", "Bob"), actualValues);
+        assertEquals(expected, actual);
     }
 
     @Test
-    void shouldDeleteEntityAndCheckExistence() {
+    void shouldDeleteExistingEntity() {
+        boolean expected = true;
         storage.save("trainer-1", "Alice");
 
-        assertTrue(storage.existsById("trainer-1"));
-        assertTrue(storage.delete("trainer-1"));
-        assertFalse(storage.existsById("trainer-1"));
-        assertFalse(storage.delete("trainer-1"));
+        boolean actual = storage.delete("trainer-1");
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void shouldReturnFalseForNullIdInDeleteAndExistsCheck() {
-        assertFalse(storage.delete(null));
-        assertFalse(storage.existsById(null));
+    void shouldNotFindEntityAfterDelete() {
+        boolean expected = false;
+        storage.save("trainer-1", "Alice");
+        storage.delete("trainer-1");
+
+        boolean actual = storage.existsById("trainer-1");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldReturnFalseWhenDeletingMissingEntity() {
+        boolean expected = false;
+
+        boolean actual = storage.delete("missing-id");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldReturnFalseWhenDeletingByNullId() {
+        boolean expected = false;
+
+        boolean actual = storage.delete(null);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldReturnFalseWhenCheckingNullIdExistence() {
+        boolean expected = false;
+
+        boolean actual = storage.existsById(null);
+
+        assertEquals(expected, actual);
     }
 }

@@ -6,16 +6,32 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 class SharedStorageTest {
 
+    private final TrainerStorage trainerStorage = new TrainerStorage();
+    private final TraineeStorage traineeStorage = new TraineeStorage();
+    private final TrainingStorage trainingStorage = new TrainingStorage();
+
+    private final SharedStorage sharedStorage = new SharedStorage(trainerStorage,
+            traineeStorage,
+            trainingStorage);
+
     @Test
-    void shouldReturnSameStoragesThatWereInjected() {
-        TrainerStorage trainerStorage = new TrainerStorage();
-        TraineeStorage traineeStorage = new TraineeStorage();
-        TrainingStorage trainingStorage = new TrainingStorage();
+    void shouldReturnInjectedTrainerStorage() {
+        TrainerStorage actual = sharedStorage.getTrainerStorage();
 
-        SharedStorage sharedStorage = new SharedStorage(trainerStorage, traineeStorage, trainingStorage);
+        assertSame(trainerStorage, actual);
+    }
 
-        assertSame(trainerStorage, sharedStorage.getTrainerStorage());
-        assertSame(traineeStorage, sharedStorage.getTraineeStorage());
-        assertSame(trainingStorage, sharedStorage.getTrainingStorage());
+    @Test
+    void shouldReturnInjectedTraineeStorage() {
+        TraineeStorage actual = sharedStorage.getTraineeStorage();
+
+        assertSame(traineeStorage, actual);
+    }
+
+    @Test
+    void shouldReturnInjectedTrainingStorage() {
+        TrainingStorage actual = sharedStorage.getTrainingStorage();
+
+        assertSame(trainingStorage, actual);
     }
 }
