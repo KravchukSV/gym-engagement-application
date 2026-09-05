@@ -15,6 +15,7 @@ public abstract class AbstractStorage<ID, T> implements Storage<ID, T> {
             throw new IllegalArgumentException("ID and entity cannot be null");
         }
         storageMap.put(id, entity);
+
         return entity;
     }
 
@@ -23,6 +24,7 @@ public abstract class AbstractStorage<ID, T> implements Storage<ID, T> {
         if (id == null) {
             return Optional.empty();
         }
+
         return Optional.ofNullable(storageMap.get(id));
     }
 
@@ -36,6 +38,7 @@ public abstract class AbstractStorage<ID, T> implements Storage<ID, T> {
         if (id == null) {
             return false;
         }
+
         return storageMap.remove(id) != null;
     }
 
@@ -44,6 +47,7 @@ public abstract class AbstractStorage<ID, T> implements Storage<ID, T> {
         if (id == null) {
             return false;
         }
+
         return storageMap.containsKey(id);
     }
 }
