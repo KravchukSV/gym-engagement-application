@@ -1,0 +1,132 @@
+{
+  "trainees": [
+    {
+      "userId": 1,
+      "firstName": "Alex",
+      "lastName": "Kovalenko",
+      "username": "Alex.Kovalenko",
+      "password": "securePass123",
+      "isActive": true,
+      "dateOfBirth": "1998-04-12",
+      "address": "Khreshchatyk St 15, Kyiv"
+    },
+    {
+      "userId": 2,
+      "firstName": "Dmytro",
+      "lastName": "Shevchenko",
+      "username": "Dmytro.Shevchenko",
+      "password": "passWorkout88",
+      "isActive": true,
+      "dateOfBirth": "1993-08-25",
+      "address": "Prospekt Peremohy 42, Kyiv"
+    },
+    {
+      "userId": 3,
+      "firstName": "Olena",
+      "lastName": "Melnyk",
+      "username": "Olena.Melnyk",
+      "password": "fitPassword01",
+      "isActive": true,
+      "dateOfBirth": "2000-11-03",
+      "address": "Horodetskoho St 8, Lviv"
+    },
+    {
+      "userId": 4,
+      "firstName": "Viktor",
+      "lastName": "BONDAR",
+      "username": "Viktor.Bondar",
+      "password": "oldPassword99",
+      "isActive": false,
+      "dateOfBirth": "1988-02-17",
+      "address": "Soborna St 110, Vinnytsia"
+    }
+  ],
+  "trainers": [
+    {
+      "userId": 1,
+      "firstName": "Marcus",
+      "lastName": "Vance",
+      "username": "Marcus.Vance",
+      "password": "trainerPass456",
+      "isActive": true,
+      "specialization": {
+        "trainingTypeId": 1,
+        "trainingTypeName": "Powerlifting"
+      }
+    },
+    {
+      "userId": 2,
+      "firstName": "Sophia",
+      "lastName": "Reyes",
+      "username": "Sophia.Reyes",
+      "password": "gymMaster2026",
+      "isActive": true,
+      "specialization": {
+        "trainingTypeId": 2,
+        "trainingTypeName": "Fitness"
+      }
+    },
+    {
+      "userId": 3,
+      "firstName": "Ihor",
+      "lastName": "Tkachenko",
+      "username": "Ihor.Tkachenko",
+      "password": "crossfitStrength1",
+      "isActive": true,
+      "specialization": {
+        "trainingTypeId": 3,
+        "trainingTypeName": "CrossFit"
+      }
+    }
+  ],
+  "trainings": [
+    {
+      "trainingId": 1,
+      "traineeId": 1,
+      "trainerId": 1,
+      "trainingName": "Heavy Sumo Deadlift Session",
+      "trainingType": {
+        "trainingTypeId": 1,
+        "trainingTypeName": "Powerlifting"
+      },
+      "trainingDate": "2026-09-10",
+      "trainingDuration": 90
+    },
+    {
+      "trainingId": 2,
+      "traineeId": 2,
+      "trainerId": 1,
+      "trainingName": "Bench Press Technique & Lockouts",
+      "trainingType": {
+        "trainingTypeId": 1,
+        "trainingTypeName": "Powerlifting"
+      },
+      "trainingDate": "2026-09-12",
+      "trainingDuration": 75
+    },
+    {
+      "trainingId": 3,
+      "traineeId": 3,
+      "trainerId": 2,
+      "trainingName": "Full Body Functional Circuit",
+      "trainingType": {
+        "trainingTypeId": 2,
+        "trainingTypeName": "Fitness"
+      },
+      "trainingDate": "2026-09-15",
+      "trainingDuration": 60
+    },
+    {
+      "trainingId": 4,
+      "traineeId": 1,
+      "trainerId": 3,
+      "trainingName": "High Intensity WOD Workout",
+      "trainingType": {
+        "trainingTypeId": 3,
+        "trainingTypeName": "CrossFit"
+      },
+      "trainingDate": "2026-09-18",
+      "trainingDuration": 45
+    }
+  ]
+}
