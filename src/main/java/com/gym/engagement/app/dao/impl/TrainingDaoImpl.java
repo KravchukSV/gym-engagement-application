@@ -17,11 +17,9 @@ public class TrainingDaoImpl implements TrainingDao {
     public TrainingDaoImpl(InMemoryStorage inMemoryStorage) {
         this.trainingStorage = inMemoryStorage.getTrainingStorage();
     }
-
     @Override
     public Training save(Training training) {
         return trainingStorage.save(training.getTrainingId(), training);
-
     }
 
     @Override

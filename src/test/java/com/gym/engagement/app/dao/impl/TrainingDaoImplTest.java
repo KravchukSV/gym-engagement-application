@@ -27,12 +27,12 @@ class TrainingDaoImplTest {
     @Mock
     private TrainingStorage trainingStorage;
 
-    private TrainingDaoImpl trainingDao;
+    private TrainingDaoImpl dao;
 
     @BeforeEach
     void setUp() {
         when(inMemoryStorage.getTrainingStorage()).thenReturn(trainingStorage);
-        trainingDao = new TrainingDaoImpl(inMemoryStorage);
+        dao = new TrainingDaoImpl(inMemoryStorage);
     }
 
     @Test
@@ -41,7 +41,7 @@ class TrainingDaoImplTest {
         Training expected = Training.builder().trainingId(10L).trainingName("Cardio").build();
         when(trainingStorage.save(10L, expected)).thenReturn(expected);
 
-        Training actual = trainingDao.save(expected);
+        Training actual = dao.save(expected);
 
         assertEquals(expected, actual);
         verify(trainingStorage, times(1)).save(10L, expected);
@@ -52,9 +52,10 @@ class TrainingDaoImplTest {
     void findById_ShouldReturnTraining() {
         Training training = Training.builder().trainingId(10L).build();
         Optional<Training> expected = Optional.of(training);
+
         when(trainingStorage.findById(10L)).thenReturn(expected);
 
-        Optional<Training> actual = trainingDao.findById(10L);
+        Optional<Training> actual = dao.findById(10L);
 
         assertEquals(expected, actual);
         verify(trainingStorage, times(1)).findById(10L);
@@ -66,7 +67,7 @@ class TrainingDaoImplTest {
         List<Training> expected = List.of(Training.builder().trainingName("Powerlifting").build());
         when(trainingStorage.findAll()).thenReturn(expected);
 
-        List<Training> actual = trainingDao.findAll();
+        List<Training> actual = dao.findAll();
 
         assertEquals(expected, actual);
         verify(trainingStorage, times(1)).findAll();

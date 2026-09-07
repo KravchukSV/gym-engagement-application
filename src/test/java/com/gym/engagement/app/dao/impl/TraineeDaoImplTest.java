@@ -27,12 +27,12 @@ class TraineeDaoImplTest {
     @Mock
     private TraineeStorage traineeStorage;
 
-    private TraineeDaoImpl traineeDao;
+    private TraineeDaoImpl dao;
 
     @BeforeEach
     void setUp() {
         when(inMemoryStorage.getTraineeStorage()).thenReturn(traineeStorage);
-        traineeDao = new TraineeDaoImpl(inMemoryStorage);
+        dao = new TraineeDaoImpl(inMemoryStorage);
     }
 
     @Test
@@ -41,7 +41,7 @@ class TraineeDaoImplTest {
         Trainee expected = Trainee.builder().userId(1L).firstName("Serhii").lastName("Kovalenko").build();
         when(traineeStorage.save(1L, expected)).thenReturn(expected);
 
-        Trainee actual = traineeDao.save(expected);
+        Trainee actual = dao.save(expected);
 
         assertEquals(expected, actual);
         verify(traineeStorage, times(1)).save(1L, expected);
@@ -52,9 +52,10 @@ class TraineeDaoImplTest {
     void update_ShouldReturnOptionalWithUpdatedTrainee() {
         Trainee trainee = Trainee.builder().userId(1L).firstName("SerhiiUpdated").build();
         Optional<Trainee> expected = Optional.of(trainee);
+
         when(traineeStorage.save(1L, trainee)).thenReturn(trainee);
 
-        Optional<Trainee> actual = traineeDao.update(1L, trainee);
+        Optional<Trainee> actual = dao.update(1L, trainee);
 
         assertEquals(expected, actual);
         verify(traineeStorage, times(1)).save(1L, trainee);
@@ -66,7 +67,7 @@ class TraineeDaoImplTest {
         Trainee trainee = Trainee.builder().userId(1L).build();
         when(traineeStorage.save(1L, trainee)).thenReturn(null);
 
-        Optional<Trainee> actual = traineeDao.update(1L, trainee);
+        Optional<Trainee> actual = dao.update(1L, trainee);
 
         assertEquals(Optional.empty(), actual);
     }
@@ -74,10 +75,10 @@ class TraineeDaoImplTest {
     @Test
     @DisplayName("delete() should return true when trainee was deleted")
     void delete_ShouldReturnTrue_WhenDeleted() {
-        Boolean expected = true;
+        boolean expected = true;
         when(traineeStorage.delete(1L)).thenReturn(expected);
 
-        boolean actual = traineeDao.delete(1L);
+        boolean actual = dao.delete(1L);
 
         assertEquals(expected, actual);
         verify(traineeStorage, times(1)).delete(1L);
@@ -88,9 +89,10 @@ class TraineeDaoImplTest {
     void findById_ShouldReturnTrainee_WhenExists() {
         Trainee trainee = Trainee.builder().userId(1L).build();
         Optional<Trainee> expected = Optional.of(trainee);
+
         when(traineeStorage.findById(1L)).thenReturn(expected);
 
-        Optional<Trainee> actual = traineeDao.findById(1L);
+        Optional<Trainee> actual = dao.findById(1L);
 
         assertEquals(expected, actual);
         verify(traineeStorage, times(1)).findById(1L);
@@ -102,7 +104,7 @@ class TraineeDaoImplTest {
         List<Trainee> expected = List.of(Trainee.builder().userId(1L).build());
         when(traineeStorage.findAll()).thenReturn(expected);
 
-        List<Trainee> actual = traineeDao.findAll();
+        List<Trainee> actual = dao.findAll();
 
         assertEquals(expected, actual);
         verify(traineeStorage, times(1)).findAll();
@@ -111,11 +113,12 @@ class TraineeDaoImplTest {
     @Test
     @DisplayName("existsByUsername() should return false when username does not match")
     void existsByUsername_ShouldReturnFalse_WhenUsernameNotFound() {
-        Boolean expected = false;
+        boolean expected = false;
         Trainee trainee = Trainee.builder().username("Serhii.Kovalenko").build();
+
         when(traineeStorage.findAll()).thenReturn(List.of(trainee));
 
-        boolean actual = traineeDao.existsByUsername("Alex.Smith");
+        boolean actual = dao.existsByUsername("Alex.Smith");
 
         assertEquals(expected, actual);
     }
@@ -123,11 +126,12 @@ class TraineeDaoImplTest {
     @Test
     @DisplayName("existsByUsername() should handle trainees with null username safely")
     void existsByUsername_ShouldHandleNullUsername() {
-        Boolean expected = false;
+        boolean expected = false;
         Trainee traineeWithNullUsername = Trainee.builder().username(null).build();
+
         when(traineeStorage.findAll()).thenReturn(List.of(traineeWithNullUsername));
 
-        boolean actual = traineeDao.existsByUsername("serhii.kovalenko");
+        boolean actual = dao.existsByUsername("serhii.kovalenko");
 
         assertEquals(expected, actual);
     }

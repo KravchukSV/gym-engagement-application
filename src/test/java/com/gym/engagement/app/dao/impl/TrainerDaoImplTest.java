@@ -26,12 +26,12 @@ class TrainerDaoImplTest {
     @Mock
     private TrainerStorage trainerStorage;
 
-    private TrainerDaoImpl trainerDao;
+    private TrainerDaoImpl dao;
 
     @BeforeEach
     void setUp() {
         when(inMemoryStorage.getTrainerStorage()).thenReturn(trainerStorage);
-        trainerDao = new TrainerDaoImpl(inMemoryStorage);
+        dao = new TrainerDaoImpl(inMemoryStorage);
     }
 
     @Test
@@ -40,7 +40,7 @@ class TrainerDaoImplTest {
         Trainer expected = Trainer.builder().userId(2L).firstName("Alex").build();
         when(trainerStorage.save(2L, expected)).thenReturn(expected);
 
-        Trainer actual = trainerDao.save(expected);
+        Trainer actual = dao.save(expected);
 
         assertEquals(expected, actual);
         verify(trainerStorage).save(2L, expected);
@@ -51,9 +51,10 @@ class TrainerDaoImplTest {
     void update_ShouldReturnOptionalWithUpdatedTrainer() {
         Trainer trainer = Trainer.builder().userId(2L).firstName("AlexUpdated").build();
         Optional<Trainer> expected = Optional.of(trainer);
+
         when(trainerStorage.save(2L, trainer)).thenReturn(trainer);
 
-        Optional<Trainer> actual = trainerDao.update(2L, trainer);
+        Optional<Trainer> actual = dao.update(2L, trainer);
 
         assertEquals(expected, actual);
     }
@@ -64,7 +65,7 @@ class TrainerDaoImplTest {
         Trainer trainer = Trainer.builder().userId(2L).build();
         when(trainerStorage.save(2L, trainer)).thenReturn(null);
 
-        Optional<Trainer> actual = trainerDao.update(2L, trainer);
+        Optional<Trainer> actual = dao.update(2L, trainer);
 
         assertEquals(Optional.empty(), actual);
     }
@@ -74,9 +75,10 @@ class TrainerDaoImplTest {
     void findById_ShouldReturnTrainer() {
         Trainer trainer = Trainer.builder().userId(2L).build();
         Optional<Trainer> expected = Optional.of(trainer);
+
         when(trainerStorage.findById(2L)).thenReturn(expected);
 
-        Optional<Trainer> actual = trainerDao.findById(2L);
+        Optional<Trainer> actual = dao.findById(2L);
 
         assertEquals(expected, actual);
     }
@@ -87,7 +89,7 @@ class TrainerDaoImplTest {
         List<Trainer> expected = List.of(Trainer.builder().userId(2L).build());
         when(trainerStorage.findAll()).thenReturn(expected);
 
-        List<Trainer> actual = trainerDao.findAll();
+        List<Trainer> actual = dao.findAll();
 
         assertEquals(expected, actual);
     }
@@ -95,11 +97,12 @@ class TrainerDaoImplTest {
     @Test
     @DisplayName("existsByUsername() should return true when username matches")
     void existsByUsername_ShouldReturnTrue_WhenExists() {
-        Boolean expected = true;
+        boolean expected = true;
         Trainer trainer = Trainer.builder().username("Alex.Smith").build();
+
         when(trainerStorage.findAll()).thenReturn(List.of(trainer));
 
-        boolean actual = trainerDao.existsByUsername("alex.smith");
+        boolean actual = dao.existsByUsername("alex.smith");
 
         assertEquals(expected, actual);
     }
@@ -107,10 +110,10 @@ class TrainerDaoImplTest {
     @Test
     @DisplayName("existsByUsername() should return false when username does not exist")
     void existsByUsername_ShouldReturnFalse_WhenNotFound() {
-        Boolean expected = false;
+        boolean expected = false;
         when(trainerStorage.findAll()).thenReturn(List.of());
 
-        boolean actual = trainerDao.existsByUsername("NonExistent.User");
+        boolean actual = dao.existsByUsername("NonExistent.User");
 
         assertEquals(expected, actual);
     }

@@ -15,7 +15,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     private final TrainerStorage trainerStorage;
 
-   public TrainerDaoImpl(InMemoryStorage inMemoryStorage) {
+    public TrainerDaoImpl(InMemoryStorage inMemoryStorage) {
        this.trainerStorage = inMemoryStorage.getTrainerStorage();
    }
 
