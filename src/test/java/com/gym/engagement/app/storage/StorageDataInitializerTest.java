@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,11 +21,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class StorageDataInitializerTest {
+
+    @Captor
+    private ArgumentCaptor<Long> IdCaptor;
 
     @Mock
     private ObjectMapper objectMapper;
@@ -35,9 +46,17 @@ class StorageDataInitializerTest {
     @Mock
     private InMemoryStorage storage;
 
-    private final TraineeStorage traineeStorage = mock(TraineeStorage.class);
-    private final TrainerStorage trainerStorage = mock(TrainerStorage.class);
-    private final TrainingStorage trainingStorage = mock(TrainingStorage.class);
+    @Mock
+    private TraineeStorage traineeStorage;
+
+    @Mock
+    private TrainerStorage trainerStorage;
+
+    @Mock
+    private TrainingStorage trainingStorage;
+
+    @Mock
+    private StorageInitialData mockData;
 
     @InjectMocks
     private StorageDataInitializer initializer;
@@ -52,9 +71,9 @@ class StorageDataInitializerTest {
     void shouldReturnSameBeanIfNotInMemoryStorage() {
         Object expectedBean = new Object();
 
-        Object actualBean = initializer.postProcessAfterInitialization(expectedBean, "someBean");
+        Object actual = initializer.postProcessAfterInitialization(expectedBean, "someBean");
 
-        assertSame(expectedBean, actualBean, "The method must return the exact same bean instance it received");
+        assertSame(expectedBean, actual, "The method must return the exact same bean instance it received");
         verifyNoInteractions(dataFileResource, objectMapper);
     }
 
@@ -64,9 +83,9 @@ class StorageDataInitializerTest {
         when(dataFileResource.exists()).thenReturn(false);
         Object expectedStorage = storage;
 
-        Object actualStorage = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
+        Object actual = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
 
-        assertSame(expectedStorage, actualStorage, "The method must return the unmodified storage bean");
+        assertSame(expectedStorage, actual, "The method must return the unmodified storage bean");
         verify(dataFileResource).exists();
         verifyNoMoreInteractions(dataFileResource);
         verifyNoInteractions(objectMapper);
@@ -76,20 +95,18 @@ class StorageDataInitializerTest {
     @DisplayName("Should successfully load Trainees from JSON into storage")
     void shouldLoadTraineesSuccessfully() throws IOException {
         Trainee expectedTrainee = Trainee.builder().userId(1L).build();
-        StorageInitialData mockData = mock(StorageInitialData.class);
-        when(mockData.getTrainees()).thenReturn(List.of(expectedTrainee));
 
-        mockInitialDataLoad(mockData);
+        mockInitialDataLoad();
+        when(mockData.getTrainees()).thenReturn(List.of(expectedTrainee));
         when(storage.getTraineeStorage()).thenReturn(traineeStorage);
 
-        ArgumentCaptor<Long> traineeIdCaptor = ArgumentCaptor.forClass(Long.class);
         ArgumentCaptor<Trainee> traineeCaptor = ArgumentCaptor.forClass(Trainee.class);
 
-        Object actualStorage = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
+        Object actual = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
 
-        assertSame(storage, actualStorage, "The method must return the original storage bean instance");
-        verify(traineeStorage).save(traineeIdCaptor.capture(), traineeCaptor.capture());
-        assertEquals(1L, traineeIdCaptor.getValue(), "Actual Trainee ID does not match the expected value");
+        assertSame(storage, actual, "The method must return the original storage bean instance");
+        verify(traineeStorage).save(IdCaptor.capture(), traineeCaptor.capture());
+        assertEquals(1L, IdCaptor.getValue(), "Actual Trainee ID does not match the expected value");
         assertEquals(expectedTrainee, traineeCaptor.getValue(), "Actual Trainee object does not match the expected value");
     }
 
@@ -97,20 +114,18 @@ class StorageDataInitializerTest {
     @DisplayName("Should successfully load Trainers from JSON into storage")
     void shouldLoadTrainersSuccessfully() throws IOException {
         Trainer expectedTrainer = Trainer.builder().userId(2L).build();
-        StorageInitialData mockData = mock(StorageInitialData.class);
-        when(mockData.getTrainers()).thenReturn(List.of(expectedTrainer));
 
-        mockInitialDataLoad(mockData);
+        mockInitialDataLoad();
+        when(mockData.getTrainers()).thenReturn(List.of(expectedTrainer));
         when(storage.getTrainerStorage()).thenReturn(trainerStorage);
 
-        ArgumentCaptor<Long> trainerIdCaptor = ArgumentCaptor.forClass(Long.class);
         ArgumentCaptor<Trainer> trainerCaptor = ArgumentCaptor.forClass(Trainer.class);
 
-        Object actualStorage = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
+        Object actual = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
 
-        assertSame(storage, actualStorage, "The method must return the original storage bean instance");
-        verify(trainerStorage).save(trainerIdCaptor.capture(), trainerCaptor.capture());
-        assertEquals(2L, trainerIdCaptor.getValue(), "Actual Trainer ID does not match the expected value");
+        assertSame(storage, actual, "The method must return the original storage bean instance");
+        verify(trainerStorage).save(IdCaptor.capture(), trainerCaptor.capture());
+        assertEquals(2L, IdCaptor.getValue(), "Actual Trainer ID does not match the expected value");
         assertEquals(expectedTrainer, trainerCaptor.getValue(), "Actual Trainer object does not match the expected value");
     }
 
@@ -118,45 +133,42 @@ class StorageDataInitializerTest {
     @DisplayName("Should successfully load Trainings from JSON into storage")
     void shouldLoadTrainingsSuccessfully() throws IOException {
         Training expectedTraining = Training.builder().trainingId(3L).build();
-        StorageInitialData mockData = mock(StorageInitialData.class);
         when(mockData.getTrainings()).thenReturn(List.of(expectedTraining));
 
-        mockInitialDataLoad(mockData);
+        mockInitialDataLoad();
         when(storage.getTrainingStorage()).thenReturn(trainingStorage);
 
-        ArgumentCaptor<Long> trainingIdCaptor = ArgumentCaptor.forClass(Long.class);
         ArgumentCaptor<Training> trainingCaptor = ArgumentCaptor.forClass(Training.class);
 
-        Object actualStorage = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
+        Object actual = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
 
-        assertSame(storage, actualStorage, "The method must return the original storage bean instance");
-        verify(trainingStorage).save(trainingIdCaptor.capture(), trainingCaptor.capture());
-        assertEquals(3L, trainingIdCaptor.getValue(), "Actual Training ID does not match the expected value");
+        assertSame(storage, actual, "The method must return the original storage bean instance");
+        verify(trainingStorage).save(IdCaptor.capture(), trainingCaptor.capture());
+        assertEquals(3L, IdCaptor.getValue(), "Actual Training ID does not match the expected value");
         assertEquals(expectedTraining, trainingCaptor.getValue(), "Actual Training object does not match the expected value");
     }
 
     @Test
     @DisplayName("Should throw IllegalStateException when an IOException occurs during file read")
     void shouldThrowExceptionWhenIOExceptionOccurs() throws IOException {
-        when(dataFileResource.exists()).thenReturn(true);
         String expectedMessagePart = "Failed to load initial data into storage";
 
+        when(dataFileResource.exists()).thenReturn(true);
         when(dataFileResource.getInputStream()).thenThrow(new IOException("File read error"));
 
-        IllegalStateException actualException = assertThrows(IllegalStateException.class,
+        IllegalStateException actual = assertThrows(IllegalStateException.class,
                 () -> initializer.postProcessAfterInitialization(storage, "inMemoryStorage"));
 
-        assertNotNull(actualException.getMessage(), "Exception message should not be null");
-        assertTrue(actualException.getMessage().contains(expectedMessagePart),
+        assertNotNull(actual.getMessage(), "Exception message should not be null");
+        assertTrue(actual.getMessage().contains(expectedMessagePart),
                 "Actual exception message should contain information about the loading failure");
     }
 
-
-    private void mockInitialDataLoad(StorageInitialData mockData) throws IOException {
-        when(dataFileResource.exists()).thenReturn(true);
+    private void mockInitialDataLoad() throws IOException {
         InputStream inputStream = new ByteArrayInputStream("{}".getBytes());
+
+        when(dataFileResource.exists()).thenReturn(true);
         when(dataFileResource.getInputStream()).thenReturn(inputStream);
         when(objectMapper.readValue(inputStream, StorageInitialData.class)).thenReturn(mockData);
     }
-
 }

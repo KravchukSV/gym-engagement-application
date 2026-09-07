@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.model.Training;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,18 +14,19 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class StorageDataInitializer implements BeanPostProcessor {
-
-    @Value("classpath:${storage.data.file-path}")
-    private Resource dataFileResource;
 
     private final ObjectMapper objectMapper;
 
-    public StorageDataInitializer(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+    @Value("classpath:${storage.data.file-path}")
+    private Resource dataFileResource;
 
     @Override
     public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
@@ -47,32 +49,26 @@ public class StorageDataInitializer implements BeanPostProcessor {
                 return;
             }
 
-            if (data.getTrainees() != null) {
-                for (Trainee trainee : data.getTrainees()) {
-                    if (trainee != null && trainee.getUserId() != null) {
-                        storage.getTraineeStorage().save(trainee.getUserId(), trainee);
-                    }
-                }
-            }
-
-            if (data.getTrainers() != null) {
-                for (Trainer trainer : data.getTrainers()) {
-                    if (trainer != null && trainer.getUserId() != null) {
-                        storage.getTrainerStorage().save(trainer.getUserId(), trainer);
-                    }
-                }
-            }
-
-            if (data.getTrainings() != null) {
-                for (Training training : data.getTrainings()) {
-                    if (training != null && training.getTrainingId() != null) {
-                        storage.getTrainingStorage().save(training.getTrainingId(), training);
-                    }
-                }
-            }
+            saveAll(data.getTrainees(), Trainee::getUserId,
+                    (id, item) -> storage.getTraineeStorage().save(id, item));
+            saveAll(data.getTrainers(), Trainer::getUserId,
+                    (id, item) -> storage.getTrainerStorage().save(id, item));
+            saveAll(data.getTrainings(),
+                    Training::getTrainingId, (id, item) -> storage.getTrainingStorage().save(id, item));
 
         } catch (IOException e) {
             throw new IllegalStateException("Failed to load initial data into storage from " + dataFileResource, e);
         }
+    }
+
+    private <K, V> void saveAll(Collection<V> entities, Function<V, K> idExtractor, BiConsumer<K, V> saver) {
+        if (entities == null) {
+            return;
+        }
+
+        entities.stream()
+                .filter(Objects::nonNull)
+                .filter(entity -> idExtractor.apply(entity) != null)
+                .forEach(entity -> saver.accept(idExtractor.apply(entity), entity));
     }
 }
