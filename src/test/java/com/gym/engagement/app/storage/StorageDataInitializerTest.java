@@ -95,12 +95,11 @@ class StorageDataInitializerTest {
     @DisplayName("Should successfully load Trainees from JSON into storage")
     void shouldLoadTraineesSuccessfully() throws IOException {
         Trainee expectedTrainee = Trainee.builder().userId(1L).build();
+        ArgumentCaptor<Trainee> traineeCaptor = ArgumentCaptor.forClass(Trainee.class);
 
         mockInitialDataLoad();
         when(mockData.getTrainees()).thenReturn(List.of(expectedTrainee));
         when(storage.getTraineeStorage()).thenReturn(traineeStorage);
-
-        ArgumentCaptor<Trainee> traineeCaptor = ArgumentCaptor.forClass(Trainee.class);
 
         Object actual = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
 
@@ -114,12 +113,11 @@ class StorageDataInitializerTest {
     @DisplayName("Should successfully load Trainers from JSON into storage")
     void shouldLoadTrainersSuccessfully() throws IOException {
         Trainer expectedTrainer = Trainer.builder().userId(2L).build();
+        ArgumentCaptor<Trainer> trainerCaptor = ArgumentCaptor.forClass(Trainer.class);
 
         mockInitialDataLoad();
         when(mockData.getTrainers()).thenReturn(List.of(expectedTrainer));
         when(storage.getTrainerStorage()).thenReturn(trainerStorage);
-
-        ArgumentCaptor<Trainer> trainerCaptor = ArgumentCaptor.forClass(Trainer.class);
 
         Object actual = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
 
@@ -133,12 +131,11 @@ class StorageDataInitializerTest {
     @DisplayName("Should successfully load Trainings from JSON into storage")
     void shouldLoadTrainingsSuccessfully() throws IOException {
         Training expectedTraining = Training.builder().trainingId(3L).build();
-        when(mockData.getTrainings()).thenReturn(List.of(expectedTraining));
+        ArgumentCaptor<Training> trainingCaptor = ArgumentCaptor.forClass(Training.class);
 
         mockInitialDataLoad();
         when(storage.getTrainingStorage()).thenReturn(trainingStorage);
-
-        ArgumentCaptor<Training> trainingCaptor = ArgumentCaptor.forClass(Training.class);
+        when(mockData.getTrainings()).thenReturn(List.of(expectedTraining));
 
         Object actual = initializer.postProcessAfterInitialization(storage, "inMemoryStorage");
 
