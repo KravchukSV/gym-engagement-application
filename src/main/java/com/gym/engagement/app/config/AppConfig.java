@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import java.security.SecureRandom;
+
 @Configuration
 @ComponentScan(basePackages = {"com.gym.engagement.app"})
 @PropertySource(value = "classpath:application.properties")
@@ -18,5 +20,10 @@ public class AppConfig {
         objectMapper.registerModule(new JavaTimeModule());
 
         return objectMapper;
+    }
+
+    @Bean
+    public SecureRandom secureRandom() {
+        return new SecureRandom();
     }
 }
