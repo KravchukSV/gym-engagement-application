@@ -32,8 +32,6 @@ class EntityValidatorTest {
         validator = new EntityValidator();
     }
 
-    // --- User Validation Tests ---
-
     @Test
     @DisplayName("validateUserForCreation() should pass for valid Trainee")
     void validateUserForCreation_ShouldPass_ForValidTrainee() {
@@ -110,8 +108,6 @@ class EntityValidatorTest {
         assertThrows(IllegalArgumentException.class, () -> validator.validateUserForUpdate(trainee));
     }
 
-    // --- Training Validation Tests ---
-
     @Test
     @DisplayName("validateTrainingForCreation() should pass for valid Training")
     void validateTrainingForCreation_ShouldPass_ForValidTraining() {
@@ -178,8 +174,6 @@ class EntityValidatorTest {
         assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
     }
 
-    // --- ID Validation Tests ---
-
     @Test
     @DisplayName("validateId() should pass for valid ID")
     void validateId_ShouldPass_ForValidId() {
@@ -191,8 +185,6 @@ class EntityValidatorTest {
     void validateId_ShouldThrow_WhenIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> validator.validateId(null));
     }
-
-    // --- Helper Factory Methods ---
 
     private Trainee.TraineeBuilder<?, ?> createTraineeBuilder() {
         return Trainee.builder()

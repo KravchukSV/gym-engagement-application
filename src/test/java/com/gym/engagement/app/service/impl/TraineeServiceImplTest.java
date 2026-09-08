@@ -67,7 +67,6 @@ class TraineeServiceImplTest {
         verify(credentialsGenerator).generateUsername(FIRST_NAME, LAST_NAME);
         verify(credentialsGenerator).generatePassword();
         verify(traineeDao).save(any(Trainee.class));
-
         assertEquals(GENERATED_USERNAME, actual.getUsername());
         assertEquals(GENERATED_PASSWORD, actual.getPassword());
         assertEquals(FIRST_NAME, actual.getFirstName());
@@ -88,7 +87,6 @@ class TraineeServiceImplTest {
 
         verify(entityValidator).validateUserForUpdate(traineeToUpdate);
         verify(traineeDao).update(TRAINEE_ID, traineeToUpdate);
-
         assertEquals(traineeToUpdate, actual);
     }
 
@@ -127,7 +125,6 @@ class TraineeServiceImplTest {
 
         verify(entityValidator).validateId(TRAINEE_ID);
         verify(traineeDao).findById(TRAINEE_ID);
-
         assertTrue(actual.isPresent());
         assertEquals(sampleTrainee, actual.get());
     }
@@ -152,7 +149,6 @@ class TraineeServiceImplTest {
                 .validateUserForCreation(sampleTrainee);
 
         assertThrows(IllegalArgumentException.class, () -> service.saveTrainee(sampleTrainee));
-
         verify(entityValidator).validateUserForCreation(sampleTrainee);
         verifyNoInteractions(credentialsGenerator, traineeDao);
     }

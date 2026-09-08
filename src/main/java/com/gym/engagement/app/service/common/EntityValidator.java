@@ -16,10 +16,8 @@ public class EntityValidator {
         validateString(user.getFirstName(), "First name");
         validateString(user.getLastName(), "Last name");
 
-        if (user instanceof Trainer trainer) {
-            if (trainer.getSpecialization() == null) {
-                throw new IllegalArgumentException("Specialization cannot be null");
-            }
+        if (isTrainerWithInvalidSpecialization(user)) {
+            throw new IllegalArgumentException("Specialization cannot be null");
         }
     }
 
@@ -61,5 +59,9 @@ public class EntityValidator {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(fieldName + " cannot be null or blank");
         }
+    }
+
+    private boolean isTrainerWithInvalidSpecialization(User user) {
+        return user instanceof Trainer trainer && trainer.getSpecialization() == null;
     }
 }

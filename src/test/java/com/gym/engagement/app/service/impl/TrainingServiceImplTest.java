@@ -49,7 +49,6 @@ class TrainingServiceImplTest {
 
         verify(entityValidator).validateTrainingForCreation(SAMPLE_TRAINING);
         verify(trainingDao).save(SAMPLE_TRAINING);
-
         assertEquals(SAMPLE_TRAINING, actual);
     }
 
@@ -61,7 +60,6 @@ class TrainingServiceImplTest {
         Optional<Training> actual = service.findTrainingById(TRAINING_ID);
 
         verify(entityValidator).validateId(TRAINING_ID);
-
         assertTrue(actual.isPresent());
         assertEquals(SAMPLE_TRAINING, actual.get());
     }

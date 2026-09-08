@@ -47,7 +47,7 @@ public class TrainerServiceImpl implements TrainerService {
         entityValidator.validateUserForUpdate(trainer);
 
         return trainerDao.update(trainer.getUserId(), trainer)
-                .orElseThrow(() -> new IllegalArgumentException("Trainer with ID " + trainer.getUserId() + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Trainer with ID %d not found", trainer.getUserId())));
     }
 
     @Override

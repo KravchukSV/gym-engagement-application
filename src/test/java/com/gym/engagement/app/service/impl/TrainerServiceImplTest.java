@@ -65,7 +65,6 @@ class TrainerServiceImplTest {
         verify(credentialsGenerator).generateUsername(FIRST_NAME, LAST_NAME);
         verify(credentialsGenerator).generatePassword();
         verify(trainerDao).save(any(Trainer.class));
-
         assertEquals(GENERATED_USERNAME, actual.getUsername());
         assertEquals(GENERATED_PASSWORD, actual.getPassword());
     }
@@ -95,7 +94,6 @@ class TrainerServiceImplTest {
         when(trainerDao.update(TRAINER_ID, trainerToUpdate)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> service.updateTrainer(trainerToUpdate));
-
         verify(entityValidator).validateUserForUpdate(trainerToUpdate);
     }
 

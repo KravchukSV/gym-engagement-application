@@ -47,7 +47,7 @@ public class TraineeServiceImpl implements TraineeService {
         entityValidator.validateUserForUpdate(trainee);
 
         return traineeDao.update(trainee.getUserId(), trainee)
-                .orElseThrow(() -> new IllegalArgumentException("Trainee with ID " + trainee.getUserId() + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Trainee with ID %d not found", trainee.getUserId())));
     }
 
     @Override
