@@ -1,4 +1,4 @@
-package com.gym.engagement.app.util.impl;
+package com.gym.engagement.app.service.common;
 
 import com.gym.engagement.app.dao.TraineeDao;
 import com.gym.engagement.app.dao.TrainerDao;
@@ -19,7 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CredentialsGeneratorImplTest {
+class CredentialsGeneratorTest {
+
+    private static final String FIRST_NAME = "Serhii";
+    private static final String LAST_NAME = "Kovalenko";
+    private static final String BASE_USERNAME = FIRST_NAME + "." + LAST_NAME;
+    private static final String USERNAME_SUFFIX_1 = BASE_USERNAME + "1";
+    private static final String USERNAME_SUFFIX_2 = BASE_USERNAME + "2";
 
     @Mock
     private TraineeDao traineeDao;
@@ -31,65 +37,60 @@ class CredentialsGeneratorImplTest {
     private SecureRandom random;
 
     @InjectMocks
-    private CredentialsGeneratorImpl credentialsGenerator;
+    private CredentialsGenerator generator;
 
     @Test
     @DisplayName("generateUsername() should return base username when no matching variants exist")
     void generateUsername_ShouldReturnBaseUsername_WhenNoMatches() {
-        String expected = "Serhii.Kovalenko";
-
         when(traineeDao.findAll()).thenReturn(List.of());
         when(trainerDao.findAll()).thenReturn(List.of());
 
-        String actual = credentialsGenerator.generateUsername("Serhii", "Kovalenko");
+        String actual = generator.generateUsername(FIRST_NAME, LAST_NAME);
 
-        assertEquals(expected, actual);
+        assertEquals(BASE_USERNAME, actual);
     }
 
     @Test
     @DisplayName("generateUsername() should return baseUsername + 1 when only base username exists")
     void generateUsername_ShouldAppendOne_WhenOnlyBaseUsernameExists() {
-        String expected = "Serhii.Kovalenko1";
-        Trainee trainee = Trainee.builder().username("Serhii.Kovalenko").build();
+        Trainee trainee = createTrainee(BASE_USERNAME);
 
         when(traineeDao.findAll()).thenReturn(List.of(trainee));
         when(trainerDao.findAll()).thenReturn(List.of());
 
-        String actual = credentialsGenerator.generateUsername("Serhii", "Kovalenko");
+        String actual = generator.generateUsername(FIRST_NAME, LAST_NAME);
 
-        assertEquals(expected, actual);
+        assertEquals(USERNAME_SUFFIX_1, actual);
     }
 
     @Test
     @DisplayName("generateUsername() should increment max suffix when numbered variants exist")
     void generateUsername_ShouldIncrementMaxSuffix_WhenNumberedVariantsExist() {
-        String expected = "Serhii.Kovalenko2";
-        Trainee trainee1 = Trainee.builder().username("Serhii.Kovalenko").build();
-        Trainee trainee2 = Trainee.builder().username("Serhii.Kovalenko1").build();
-        Trainer trainer = Trainer.builder().username("Andrii.Melnyk").build();
+        Trainee trainee1 = createTrainee(BASE_USERNAME);
+        Trainee trainee2 = createTrainee(USERNAME_SUFFIX_1);
+        Trainer trainer = createTrainer("Andrii.Melnyk");
 
         when(traineeDao.findAll()).thenReturn(List.of(trainee1, trainee2));
         when(trainerDao.findAll()).thenReturn(List.of(trainer));
 
-        String actual = credentialsGenerator.generateUsername("Serhii", "Kovalenko");
+        String actual = generator.generateUsername(FIRST_NAME, LAST_NAME);
 
-        assertEquals(expected, actual);
+        assertEquals(USERNAME_SUFFIX_2, actual);
     }
 
     @Test
     @DisplayName("generateUsername() should ignore non-numeric suffixes or unrelated prefixes")
     void generateUsername_ShouldIgnoreInvalidVariants() {
-        String expected = "Serhii.Kovalenko";
-        Trainee trainee1 = Trainee.builder().username("Serhii.KovalenkoABC").build();
-        Trainee trainee2 = Trainee.builder().username("Other.User").build();
-        Trainee trainee3 = Trainee.builder().username(null).build();
+        Trainee trainee1 = createTrainee(BASE_USERNAME + "ABC");
+        Trainee trainee2 = createTrainee("Other.User");
+        Trainee trainee3 = createTrainee(null);
 
         when(traineeDao.findAll()).thenReturn(List.of(trainee1, trainee2, trainee3));
         when(trainerDao.findAll()).thenReturn(List.of());
 
-        String actual = credentialsGenerator.generateUsername("Serhii", "Kovalenko");
+        String actual = generator.generateUsername(FIRST_NAME, LAST_NAME);
 
-        assertEquals(expected, actual);
+        assertEquals(BASE_USERNAME, actual);
     }
 
     @Test
@@ -97,10 +98,22 @@ class CredentialsGeneratorImplTest {
     void generatePassword_ShouldReturnValidPassword() {
         when(random.nextInt(62)).thenReturn(0);
 
-        String actual = credentialsGenerator.generatePassword();
+        String actual = generator.generatePassword();
 
         assertNotNull(actual);
         assertEquals(10, actual.length());
         assertEquals("AAAAAAAAAA", actual);
+    }
+
+    private Trainee createTrainee(String username) {
+        return Trainee.builder()
+                .username(username)
+                .build();
+    }
+
+    private Trainer createTrainer(String username) {
+        return Trainer.builder()
+                .username(username)
+                .build();
     }
 }
