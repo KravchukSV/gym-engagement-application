@@ -5,7 +5,7 @@
       "firstName": "Alex",
       "lastName": "Kovalenko",
       "username": "Alex.Kovalenko",
-      "password": "securePass123",
+      "password": "$2a$10$E2x8vB9Q7Y5R4W1E3T2Y1u8i9o0p1a2b3c4d5e6f7g8h9i0j1k2l3",
       "isActive": true,
       "dateOfBirth": "1998-04-12",
       "address": "Khreshchatyk St 15, Kyiv"
@@ -15,7 +15,7 @@
       "firstName": "Dmytro",
       "lastName": "Shevchenko",
       "username": "Dmytro.Shevchenko",
-      "password": "passWorkout88",
+      "password": "$2a$10$f8S2s1G0f9E8d7C6b5A4u3N2m1k0j9i8h7g6f5e4d3c2b1a0z9y8x",
       "isActive": true,
       "dateOfBirth": "1993-08-25",
       "address": "Prospekt Peremohy 42, Kyiv"
@@ -25,7 +25,7 @@
       "firstName": "Olena",
       "lastName": "Melnyk",
       "username": "Olena.Melnyk",
-      "password": "fitPassword01",
+      "password": "$2a$10$9i8h7g6f5e4d3c2b1a0z9u8i7o6p5a4b3c2d1e0f9g8h7i6j5k4l3",
       "isActive": true,
       "dateOfBirth": "2000-11-03",
       "address": "Horodetskoho St 8, Lviv"
@@ -35,7 +35,7 @@
       "firstName": "Viktor",
       "lastName": "BONDAR",
       "username": "Viktor.Bondar",
-      "password": "oldPassword99",
+      "password": "$2a$10$1a2b3c4d5e6f7g8h9i0j1u2v3w4x5y6z7A8B9C0D1E2F3G4H5I6J7",
       "isActive": false,
       "dateOfBirth": "1988-02-17",
       "address": "Soborna St 110, Vinnytsia"
@@ -47,7 +47,7 @@
       "firstName": "Marcus",
       "lastName": "Vance",
       "username": "Marcus.Vance",
-      "password": "trainerPass456",
+      "password": "$2a$10$8g7f6e5d4c3b2a1z0y9x8u7i6o5p4a3b2c1d0e9f8g7h6i5j4k3l2",
       "isActive": true,
       "specialization": {
         "trainingTypeId": 1,
@@ -59,7 +59,7 @@
       "firstName": "Sophia",
       "lastName": "Reyes",
       "username": "Sophia.Reyes",
-      "password": "gymMaster2026",
+      "password": "$2a$10$0z9y8x7w6v5u4t3s2r1q0u9i8o7p6a5b4c3d2e1f0g9h8i7j6k5l4",
       "isActive": true,
       "specialization": {
         "trainingTypeId": 2,
@@ -71,7 +71,7 @@
       "firstName": "Ihor",
       "lastName": "Tkachenko",
       "username": "Ihor.Tkachenko",
-      "password": "crossfitStrength1",
+      "password": "$2a$10$3c2b1a0z9y8x7w6v5u4t3u2i1o0p9a8b7c6d5e4f3g2h1i0j9k8l7",
       "isActive": true,
       "specialization": {
         "trainingTypeId": 3,

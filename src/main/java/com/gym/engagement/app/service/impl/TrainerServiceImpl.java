@@ -6,6 +6,7 @@ import com.gym.engagement.app.service.TrainerService;
 import com.gym.engagement.app.service.common.CredentialsGenerator;
 import com.gym.engagement.app.service.common.EntityValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class TrainerServiceImpl implements TrainerService {
     private TrainerDao trainerDao;
     private CredentialsGenerator credentialsGenerator;
     private EntityValidator entityValidator;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public void setTrainerDao(TrainerDao trainerDao) {
@@ -31,6 +33,11 @@ public class TrainerServiceImpl implements TrainerService {
     @Autowired
     public void setEntityValidator(EntityValidator entityValidator) {
         this.entityValidator = entityValidator;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -65,10 +72,11 @@ public class TrainerServiceImpl implements TrainerService {
     private Trainer createTrainerWithCredentials(Trainer trainer) {
         String username = credentialsGenerator.generateUsername(trainer.getFirstName(), trainer.getLastName());
         String password = credentialsGenerator.generatePassword();
+        String encodedPassword = passwordEncoder.encode(password);
 
         return trainer.toBuilder()
                 .username(username)
-                .password(password)
+                .password(encodedPassword)
                 .build();
     }
 }
