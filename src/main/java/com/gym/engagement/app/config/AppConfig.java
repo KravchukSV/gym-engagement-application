@@ -1,6 +1,7 @@
 package com.gym.engagement.app.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,5 +26,10 @@ public class AppConfig {
     @Bean
     public SecureRandom secureRandom() {
         return new SecureRandom();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }
