@@ -6,11 +6,11 @@ import com.gym.engagement.app.dto.TrainingDto;
 import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.model.Training;
-import org.modelmapper.ModelMapper;
 import com.gym.engagement.app.service.TraineeService;
 import com.gym.engagement.app.service.TrainerService;
 import com.gym.engagement.app.service.TrainingService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

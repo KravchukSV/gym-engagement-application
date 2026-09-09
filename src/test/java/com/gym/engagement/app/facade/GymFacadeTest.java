@@ -56,7 +56,7 @@ class GymFacadeTest {
     private ModelMapper modelMapper;
 
     @InjectMocks
-    private GymFacade gymFacade;
+    private GymFacade facade;
 
     @Test
     @DisplayName("createTrainee should map DTO, save entity and return DTO")
@@ -65,7 +65,7 @@ class GymFacadeTest {
         when(traineeService.saveTrainee(TRAINEE)).thenReturn(TRAINEE);
         when(modelMapper.map(TRAINEE, TraineeDto.class)).thenReturn(TRAINEE_DTO);
 
-        TraineeDto actual = gymFacade.createTrainee(TRAINEE_DTO);
+        TraineeDto actual = facade.createTrainee(TRAINEE_DTO);
 
         assertEquals(TRAINEE_DTO, actual);
         verify(modelMapper).map(TRAINEE_DTO, Trainee.class);
@@ -80,7 +80,7 @@ class GymFacadeTest {
         when(traineeService.updateTrainee(TRAINEE)).thenReturn(TRAINEE);
         when(modelMapper.map(TRAINEE, TraineeDto.class)).thenReturn(TRAINEE_DTO);
 
-        TraineeDto actual = gymFacade.updateTrainee(TRAINEE_DTO);
+        TraineeDto actual = facade.updateTrainee(TRAINEE_DTO);
 
         assertEquals(TRAINEE_DTO, actual);
         verify(modelMapper).map(TRAINEE_DTO, Trainee.class);
@@ -91,7 +91,7 @@ class GymFacadeTest {
     @Test
     @DisplayName("deleteTrainee should delegate to service")
     void deleteTrainee_ShouldDelegateToService() {
-        gymFacade.deleteTrainee(TRAINEE_ID);
+        facade.deleteTrainee(TRAINEE_ID);
 
         verify(traineeService).deleteTrainee(TRAINEE_ID);
         verifyNoInteractions(modelMapper);
@@ -103,7 +103,7 @@ class GymFacadeTest {
         when(traineeService.findTraineeById(TRAINEE_ID)).thenReturn(Optional.of(TRAINEE));
         when(modelMapper.map(TRAINEE, TraineeDto.class)).thenReturn(TRAINEE_DTO);
 
-        Optional<TraineeDto> actual = gymFacade.findTraineeById(TRAINEE_ID);
+        Optional<TraineeDto> actual = facade.findTraineeById(TRAINEE_ID);
 
         assertTrue(actual.isPresent());
         assertEquals(TRAINEE_DTO, actual.get());
@@ -116,7 +116,7 @@ class GymFacadeTest {
     void findTraineeById_WhenNotFound_ShouldReturnEmpty() {
         when(traineeService.findTraineeById(TRAINEE_ID)).thenReturn(Optional.empty());
 
-        Optional<TraineeDto> actual = gymFacade.findTraineeById(TRAINEE_ID);
+        Optional<TraineeDto> actual = facade.findTraineeById(TRAINEE_ID);
 
         assertTrue(actual.isEmpty());
         verify(traineeService).findTraineeById(TRAINEE_ID);
@@ -129,7 +129,7 @@ class GymFacadeTest {
         when(traineeService.findAllTrainees()).thenReturn(List.of(TRAINEE));
         when(modelMapper.map(TRAINEE, TraineeDto.class)).thenReturn(TRAINEE_DTO);
 
-        List<TraineeDto> actual = gymFacade.findAllTrainees();
+        List<TraineeDto> actual = facade.findAllTrainees();
 
         assertEquals(List.of(TRAINEE_DTO), actual);
         verify(traineeService).findAllTrainees();
@@ -143,7 +143,7 @@ class GymFacadeTest {
         when(trainerService.createTrainer(TRAINER)).thenReturn(TRAINER);
         when(modelMapper.map(TRAINER, TrainerDto.class)).thenReturn(TRAINER_DTO);
 
-        TrainerDto actual = gymFacade.createTrainer(TRAINER_DTO);
+        TrainerDto actual = facade.createTrainer(TRAINER_DTO);
 
         assertEquals(TRAINER_DTO, actual);
         verify(modelMapper).map(TRAINER_DTO, Trainer.class);
@@ -158,7 +158,7 @@ class GymFacadeTest {
         when(trainerService.updateTrainer(TRAINER)).thenReturn(TRAINER);
         when(modelMapper.map(TRAINER, TrainerDto.class)).thenReturn(TRAINER_DTO);
 
-        TrainerDto actual = gymFacade.updateTrainer(TRAINER_DTO);
+        TrainerDto actual = facade.updateTrainer(TRAINER_DTO);
 
         assertEquals(TRAINER_DTO, actual);
         verify(modelMapper).map(TRAINER_DTO, Trainer.class);
@@ -172,7 +172,7 @@ class GymFacadeTest {
         when(trainerService.findTrainerById(TRAINER_ID)).thenReturn(Optional.of(TRAINER));
         when(modelMapper.map(TRAINER, TrainerDto.class)).thenReturn(TRAINER_DTO);
 
-        Optional<TrainerDto> actual = gymFacade.findTrainerById(TRAINER_ID);
+        Optional<TrainerDto> actual = facade.findTrainerById(TRAINER_ID);
 
         assertTrue(actual.isPresent());
         assertEquals(TRAINER_DTO, actual.get());
@@ -185,7 +185,7 @@ class GymFacadeTest {
     void findTrainerById_WhenNotFound_ShouldReturnEmpty() {
         when(trainerService.findTrainerById(TRAINER_ID)).thenReturn(Optional.empty());
 
-        Optional<TrainerDto> actual = gymFacade.findTrainerById(TRAINER_ID);
+        Optional<TrainerDto> actual = facade.findTrainerById(TRAINER_ID);
 
         assertTrue(actual.isEmpty());
         verify(trainerService).findTrainerById(TRAINER_ID);
@@ -198,7 +198,7 @@ class GymFacadeTest {
         when(trainerService.findAllTrainers()).thenReturn(List.of(TRAINER));
         when(modelMapper.map(TRAINER, TrainerDto.class)).thenReturn(TRAINER_DTO);
 
-        List<TrainerDto> actual = gymFacade.findAllTrainers();
+        List<TrainerDto> actual = facade.findAllTrainers();
 
         assertEquals(List.of(TRAINER_DTO), actual);
         verify(trainerService).findAllTrainers();
@@ -212,7 +212,7 @@ class GymFacadeTest {
         when(trainingService.createTraining(TRAINING)).thenReturn(TRAINING);
         when(modelMapper.map(TRAINING, TrainingDto.class)).thenReturn(TRAINING_DTO);
 
-        TrainingDto actual = gymFacade.createTraining(TRAINING_DTO);
+        TrainingDto actual = facade.createTraining(TRAINING_DTO);
 
         assertEquals(TRAINING_DTO, actual);
         verify(modelMapper).map(TRAINING_DTO, Training.class);
@@ -226,7 +226,7 @@ class GymFacadeTest {
         when(trainingService.findTrainingById(TRAINING_ID)).thenReturn(Optional.of(TRAINING));
         when(modelMapper.map(TRAINING, TrainingDto.class)).thenReturn(TRAINING_DTO);
 
-        Optional<TrainingDto> actual = gymFacade.findTrainingById(TRAINING_ID);
+        Optional<TrainingDto> actual = facade.findTrainingById(TRAINING_ID);
 
         assertTrue(actual.isPresent());
         assertEquals(TRAINING_DTO, actual.get());
@@ -239,7 +239,7 @@ class GymFacadeTest {
     void findTrainingById_WhenNotFound_ShouldReturnEmpty() {
         when(trainingService.findTrainingById(TRAINING_ID)).thenReturn(Optional.empty());
 
-        Optional<TrainingDto> actual = gymFacade.findTrainingById(TRAINING_ID);
+        Optional<TrainingDto> actual = facade.findTrainingById(TRAINING_ID);
 
         assertTrue(actual.isEmpty());
         verify(trainingService).findTrainingById(TRAINING_ID);
@@ -252,7 +252,7 @@ class GymFacadeTest {
         when(trainingService.findAllTrainings()).thenReturn(List.of(TRAINING));
         when(modelMapper.map(TRAINING, TrainingDto.class)).thenReturn(TRAINING_DTO);
 
-        List<TrainingDto> actual = gymFacade.findAllTrainings();
+        List<TrainingDto> actual = facade.findAllTrainings();
 
         assertEquals(List.of(TRAINING_DTO), actual);
         verify(trainingService).findAllTrainings();
@@ -270,6 +270,7 @@ class GymFacadeTest {
         TraineeDto dto = new TraineeDto();
         dto.setUserId(TRAINEE_ID);
         dto.setFirstName(TRAINEE_FIRST_NAME);
+
         return dto;
     }
 
@@ -284,6 +285,7 @@ class GymFacadeTest {
         TrainerDto dto = new TrainerDto();
         dto.setUserId(TRAINER_ID);
         dto.setFirstName(TRAINER_FIRST_NAME);
+
         return dto;
     }
 
@@ -298,6 +300,7 @@ class GymFacadeTest {
         TrainingDto dto = new TrainingDto();
         dto.setTrainingId(TRAINING_ID);
         dto.setTrainingName(TRAINING_NAME);
+
         return dto;
     }
 }
