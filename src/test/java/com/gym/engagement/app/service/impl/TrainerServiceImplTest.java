@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,12 +33,16 @@ class TrainerServiceImplTest {
     private static final String LAST_NAME = "Melnyk";
     private static final String GENERATED_USERNAME = FIRST_NAME + "." + LAST_NAME;
     private static final String GENERATED_PASSWORD = "Password123";
+    private static final String ENCODED_PASSWORD = "$2a$10$e8R4a1H1zP4uL4J3o4I0e.3n2m1k0j9i8h7g6f5e4d3c2b1a";
 
     @Mock
     private TrainerDao trainerDao;
 
     @Mock
     private CredentialsGenerator credentialsGenerator;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @Mock
     private EntityValidator entityValidator;
@@ -57,6 +62,7 @@ class TrainerServiceImplTest {
     void createTrainer_ShouldGenerateCredentialsAndSave() {
         when(credentialsGenerator.generateUsername(FIRST_NAME, LAST_NAME)).thenReturn(GENERATED_USERNAME);
         when(credentialsGenerator.generatePassword()).thenReturn(GENERATED_PASSWORD);
+        when(passwordEncoder.encode(GENERATED_PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(trainerDao.save(any(Trainer.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Trainer actual = service.createTrainer(sampleTrainer);
@@ -64,9 +70,10 @@ class TrainerServiceImplTest {
         verify(entityValidator).validateUserForCreation(sampleTrainer);
         verify(credentialsGenerator).generateUsername(FIRST_NAME, LAST_NAME);
         verify(credentialsGenerator).generatePassword();
+        verify(passwordEncoder).encode(GENERATED_PASSWORD);
         verify(trainerDao).save(any(Trainer.class));
         assertEquals(GENERATED_USERNAME, actual.getUsername());
-        assertEquals(GENERATED_PASSWORD, actual.getPassword());
+        assertEquals(ENCODED_PASSWORD, actual.getPassword());
     }
 
     @Test
