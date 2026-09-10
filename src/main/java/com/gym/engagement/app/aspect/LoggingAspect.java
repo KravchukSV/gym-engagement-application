@@ -15,6 +15,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
 
+    private static final String PREFIX_SAVE = "save";
+    private static final String PREFIX_CREATE = "create";
+    private static final String PREFIX_UPDATE = "update";
+    private static final String PREFIX_DELETE = "delete";
+    private static final String PREFIX_FIND = "find";
+    private static final String PREFIX_GET = "get";
+
     @Pointcut("!execution(* com.gym.engagement.app.service.common.CredentialsGenerator.generatePassword(..))")
     public void excludeGeneratePassword() {
     }
@@ -56,14 +63,17 @@ public class LoggingAspect {
         String methodName = joinPoint.getSignature().getName();
         String action = determineBusinessAction(methodName);
 
-        if (action != null) {
-            String className = joinPoint.getSignature().getDeclaringTypeName();
-            String domainEntity = extractDomainEntity(className);
-            String contextDetails = extractContextDetails(joinPoint, result);
-
-            log.info("BUSINESS EVENT | Action: [{}] | Domain: [{}] | Context: [{}]",
-                    action, domainEntity, contextDetails);
+        if (action == null) {
+            return;
         }
+
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String domainEntity = extractDomainEntity(className);
+        String contextDetails = extractContextDetails(joinPoint, result);
+
+        log.info("BUSINESS EVENT | Action: [{}] | Domain: [{}] | Context: [{}]",
+                action, domainEntity, contextDetails);
+
     }
 
     @AfterThrowing(pointcut = "appLayers() && excludeGeneratePassword()", throwing = "ex")
@@ -75,19 +85,16 @@ public class LoggingAspect {
     }
 
     private String determineBusinessAction(String methodName) {
-        if (methodName.startsWith("save") || methodName.startsWith("create")) {
+        if (methodName.startsWith(PREFIX_SAVE) || methodName.startsWith(PREFIX_CREATE)) {
             return "CREATE";
         }
-
-        if (methodName.startsWith("update")) {
+        if (methodName.startsWith(PREFIX_UPDATE)) {
             return "UPDATE";
         }
-
-        if (methodName.startsWith("delete")) {
+        if (methodName.startsWith(PREFIX_DELETE)) {
             return "DELETE";
         }
-
-        if (methodName.startsWith("find") || methodName.startsWith("get")) {
+        if (methodName.startsWith(PREFIX_FIND) || methodName.startsWith(PREFIX_GET)) {
             return "READ";
         }
 
