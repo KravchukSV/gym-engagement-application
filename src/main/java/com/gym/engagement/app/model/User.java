@@ -2,11 +2,13 @@ package com.gym.engagement.app.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = "password")
 public abstract class User {
 
     @EqualsAndHashCode.Include
