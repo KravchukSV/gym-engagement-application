@@ -101,7 +101,10 @@ class TrainerServiceImplTest {
 
         when(trainerDao.update(TRAINER_ID, trainerToUpdate)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> service.updateTrainer(trainerToUpdate));
+        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
+                () -> service.updateTrainer(trainerToUpdate));
+
+        assertEquals(String.format("Trainer with ID %d not found", TRAINER_ID), actual.getMessage());
         verify(entityValidator).validateUserForUpdate(trainerToUpdate);
     }
 
@@ -135,7 +138,10 @@ class TrainerServiceImplTest {
                 .when(entityValidator)
                 .validateUserForCreation(sampleTrainer);
 
-        assertThrows(IllegalArgumentException.class, () -> service.createTrainer(sampleTrainer));
+        IllegalArgumentException actual = assertThrows(IllegalArgumentException.class,
+                () -> service.createTrainer(sampleTrainer));
+
+        assertEquals("Invalid user", actual.getMessage());
     }
 
     private Trainer.TrainerBuilder<?, ?> createTrainerBuilder() {

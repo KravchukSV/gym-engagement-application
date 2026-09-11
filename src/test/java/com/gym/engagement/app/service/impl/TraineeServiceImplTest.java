@@ -112,7 +112,7 @@ class TraineeServiceImplTest {
 
         verify(entityValidator).validateUserForUpdate(traineeToUpdate);
         verify(traineeDao).update(TRAINEE_ID, traineeToUpdate);
-        assertEquals("Trainee with ID " + TRAINEE_ID + " not found", actual.getMessage());
+        assertEquals(String.format("Trainee with ID %d not found", TRAINEE_ID), actual.getMessage());
     }
 
     @Test
@@ -156,7 +156,10 @@ class TraineeServiceImplTest {
                 .when(entityValidator)
                 .validateUserForCreation(sampleTrainee);
 
-        assertThrows(IllegalArgumentException.class, () -> service.saveTrainee(sampleTrainee));
+        IllegalArgumentException actual = assertThrows(IllegalArgumentException.class,
+                () -> service.saveTrainee(sampleTrainee));
+
+        assertEquals("Invalid user", actual.getMessage());
         verify(entityValidator).validateUserForCreation(sampleTrainee);
         verifyNoInteractions(credentialsGenerator, traineeDao);
     }
