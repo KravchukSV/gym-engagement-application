@@ -1,7 +1,7 @@
 package com.gym.engagement.app.storage;
 
+import com.gym.engagement.app.exception.ValidationException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -36,20 +36,18 @@ class AbstractStorageTest {
 
     @Test
     void shouldRejectNullIdOnSave() {
-        Class<IllegalArgumentException> expected = IllegalArgumentException.class;
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> storage.save(null, "Alice"));
 
-        Executable actual = () -> storage.save(null, "Alice");
-
-        assertThrows(expected, actual);
+        assertEquals("ID cannot be null", actual.getMessage());
     }
 
     @Test
     void shouldRejectNullEntityOnSave() {
-        Class<IllegalArgumentException> expected = IllegalArgumentException.class;
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> storage.save("trainer-1", null));
 
-        Executable actual = () -> storage.save("trainer-1", null);
-
-        assertThrows(expected, actual);
+        assertEquals("Entity cannot be null", actual.getMessage());
     }
 
     @Test

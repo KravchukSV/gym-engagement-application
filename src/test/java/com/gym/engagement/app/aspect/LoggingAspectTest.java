@@ -87,7 +87,9 @@ class LoggingAspectTest {
         when(signature.getName()).thenReturn(METHOD_SAVE_TRAINEE);
         when(proceedingJoinPoint.proceed()).thenThrow(new RuntimeException(ERROR_MESSAGE));
 
-        assertThrows(RuntimeException.class, () -> aspect.logTimeAndDebug(proceedingJoinPoint));
+        RuntimeException actual = assertThrows(RuntimeException.class,
+                () -> aspect.logTimeAndDebug(proceedingJoinPoint));
+        assertEquals(ERROR_MESSAGE, actual.getMessage());
     }
 
     @ParameterizedTest

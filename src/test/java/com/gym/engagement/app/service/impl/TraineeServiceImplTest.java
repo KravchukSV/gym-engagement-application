@@ -1,6 +1,7 @@
 package com.gym.engagement.app.service.impl;
 
 import com.gym.engagement.app.dao.TraineeDao;
+import com.gym.engagement.app.exception.EntityNotFoundException;
 import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.service.common.CredentialsGenerator;
 import com.gym.engagement.app.service.common.EntityValidator;
@@ -106,12 +107,12 @@ class TraineeServiceImplTest {
 
         when(traineeDao.update(TRAINEE_ID, traineeToUpdate)).thenReturn(Optional.empty());
 
-        IllegalArgumentException actual = assertThrows(IllegalArgumentException.class,
+        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
                 () -> service.updateTrainee(traineeToUpdate));
 
         verify(entityValidator).validateUserForUpdate(traineeToUpdate);
         verify(traineeDao).update(TRAINEE_ID, traineeToUpdate);
-        assertEquals("Trainee with ID " + TRAINEE_ID + " not found", actual.getMessage());
+        assertEquals(String.format("Trainee with ID %d not found", TRAINEE_ID), actual.getMessage());
     }
 
     @Test
@@ -155,7 +156,10 @@ class TraineeServiceImplTest {
                 .when(entityValidator)
                 .validateUserForCreation(sampleTrainee);
 
-        assertThrows(IllegalArgumentException.class, () -> service.saveTrainee(sampleTrainee));
+        IllegalArgumentException actual = assertThrows(IllegalArgumentException.class,
+                () -> service.saveTrainee(sampleTrainee));
+
+        assertEquals("Invalid user", actual.getMessage());
         verify(entityValidator).validateUserForCreation(sampleTrainee);
         verifyNoInteractions(credentialsGenerator, traineeDao);
     }

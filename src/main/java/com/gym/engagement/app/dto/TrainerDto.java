@@ -1,8 +1,8 @@
 package com.gym.engagement.app.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data

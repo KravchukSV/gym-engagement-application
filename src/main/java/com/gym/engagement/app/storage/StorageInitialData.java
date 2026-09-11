@@ -1,10 +1,11 @@
 package com.gym.engagement.app.storage;
 
+import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.model.Training;
-import com.gym.engagement.app.model.Trainee;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.List;
 
 @Getter

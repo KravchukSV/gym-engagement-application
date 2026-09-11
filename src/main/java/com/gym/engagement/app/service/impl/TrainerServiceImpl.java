@@ -1,6 +1,7 @@
 package com.gym.engagement.app.service.impl;
 
 import com.gym.engagement.app.dao.TrainerDao;
+import com.gym.engagement.app.exception.EntityNotFoundException;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.service.TrainerService;
 import com.gym.engagement.app.service.common.CredentialsGenerator;
@@ -54,7 +55,8 @@ public class TrainerServiceImpl implements TrainerService {
         entityValidator.validateUserForUpdate(trainer);
 
         return trainerDao.update(trainer.getUserId(), trainer)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Trainer with ID %d not found", trainer.getUserId())));
+                .orElseThrow(() -> new EntityNotFoundException(String
+                        .format("Trainer with ID %d not found", trainer.getUserId())));
     }
 
     @Override

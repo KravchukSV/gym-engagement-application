@@ -1,5 +1,6 @@
 package com.gym.engagement.app.service.common;
 
+import com.gym.engagement.app.exception.ValidationException;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.model.Training;
 import com.gym.engagement.app.model.User;
@@ -10,14 +11,14 @@ public class EntityValidator {
 
     public void validateUserForCreation(User user) {
         if (user == null) {
-            throw new IllegalArgumentException("User object cannot be null");
+            throw new ValidationException("User object cannot be null");
         }
 
         validateString(user.getFirstName(), "First name");
         validateString(user.getLastName(), "Last name");
 
         if (isTrainerWithInvalidSpecialization(user)) {
-            throw new IllegalArgumentException("Specialization cannot be null");
+            throw new ValidationException("Specialization cannot be null");
         }
     }
 
@@ -28,36 +29,36 @@ public class EntityValidator {
 
     public void validateTrainingForCreation(Training training) {
         if (training == null) {
-            throw new IllegalArgumentException("Training object cannot be null");
+            throw new ValidationException("Training object cannot be null");
         }
 
         if (training.getTraineeId() == null) {
-            throw new IllegalArgumentException("Trainee ID cannot be null");
+            throw new ValidationException("Trainee ID cannot be null");
         }
 
         if (training.getTrainerId() == null) {
-            throw new IllegalArgumentException("Trainer ID cannot be null");
+            throw new ValidationException("Trainer ID cannot be null");
         }
 
         validateString(training.getTrainingName(), "Training name");
         if (training.getTrainingDate() == null) {
-            throw new IllegalArgumentException("Training date cannot be null");
+            throw new ValidationException("Training date cannot be null");
         }
 
         if (training.getTrainingDuration() == null || training.getTrainingDuration() <= 0) {
-            throw new IllegalArgumentException("Training duration must be positive");
+            throw new ValidationException("Training duration must be positive");
         }
     }
 
     public void validateId(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("ID cannot be null");
+            throw new ValidationException("ID cannot be null");
         }
     }
 
     private void validateString(String value, String fieldName) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(fieldName + " cannot be null or blank");
+            throw new ValidationException(fieldName + " cannot be null or blank");
         }
     }
 

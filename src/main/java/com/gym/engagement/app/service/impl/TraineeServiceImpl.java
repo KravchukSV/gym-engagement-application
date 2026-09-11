@@ -1,6 +1,7 @@
 package com.gym.engagement.app.service.impl;
 
 import com.gym.engagement.app.dao.TraineeDao;
+import com.gym.engagement.app.exception.EntityNotFoundException;
 import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.service.TraineeService;
 import com.gym.engagement.app.service.common.CredentialsGenerator;
@@ -54,7 +55,8 @@ public class TraineeServiceImpl implements TraineeService {
         entityValidator.validateUserForUpdate(trainee);
 
         return traineeDao.update(trainee.getUserId(), trainee)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Trainee with ID %d not found", trainee.getUserId())));
+                .orElseThrow(() -> new EntityNotFoundException(String
+                        .format("Trainee with ID %d not found", trainee.getUserId())));
     }
 
     @Override

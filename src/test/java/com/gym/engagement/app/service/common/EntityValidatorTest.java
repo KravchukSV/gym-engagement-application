@@ -1,5 +1,6 @@
 package com.gym.engagement.app.service.common;
 
+import com.gym.engagement.app.exception.ValidationException;
 import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.model.Training;
@@ -14,6 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EntityValidatorTest {
@@ -51,7 +53,10 @@ class EntityValidatorTest {
     @Test
     @DisplayName("validateUserForCreation() should throw when User is null")
     void validateUserForCreation_ShouldThrow_WhenUserIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForCreation(null));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateUserForCreation(null));
+
+        assertEquals("User object cannot be null", actual.getMessage());
     }
 
     @ParameterizedTest
@@ -63,7 +68,10 @@ class EntityValidatorTest {
                 .firstName(invalidName)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForCreation(trainee));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateUserForCreation(trainee));
+
+        assertEquals("First name cannot be null or blank", actual.getMessage());
     }
 
     @ParameterizedTest
@@ -75,7 +83,10 @@ class EntityValidatorTest {
                 .lastName(invalidName)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForCreation(trainee));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateUserForCreation(trainee));
+
+        assertEquals("Last name cannot be null or blank", actual.getMessage());
     }
 
     @Test
@@ -85,7 +96,10 @@ class EntityValidatorTest {
                 .specialization(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForCreation(trainer));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateUserForCreation(trainer));
+
+        assertEquals("Specialization cannot be null", actual.getMessage());
     }
 
     @Test
@@ -105,7 +119,10 @@ class EntityValidatorTest {
                 .userId(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForUpdate(trainee));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateUserForUpdate(trainee));
+
+        assertEquals("ID cannot be null", actual.getMessage());
     }
 
     @Test
@@ -119,7 +136,10 @@ class EntityValidatorTest {
     @Test
     @DisplayName("validateTrainingForCreation() should throw when Training is null")
     void validateTrainingForCreation_ShouldThrow_WhenTrainingIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(null));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateTrainingForCreation(null));
+
+        assertEquals("Training object cannot be null", actual.getMessage());
     }
 
     @Test
@@ -129,7 +149,10 @@ class EntityValidatorTest {
                 .traineeId(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateTrainingForCreation(training));
+
+        assertEquals("Trainee ID cannot be null", actual.getMessage());
     }
 
     @Test
@@ -139,7 +162,10 @@ class EntityValidatorTest {
                 .trainerId(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateTrainingForCreation(training));
+
+        assertEquals("Trainer ID cannot be null", actual.getMessage());
     }
 
     @ParameterizedTest
@@ -151,7 +177,10 @@ class EntityValidatorTest {
                 .trainingName(invalidName)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateTrainingForCreation(training));
+
+        assertEquals("Training name cannot be null or blank", actual.getMessage());
     }
 
     @Test
@@ -161,7 +190,10 @@ class EntityValidatorTest {
                 .trainingDate(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateTrainingForCreation(training));
+
+        assertEquals("Training date cannot be null", actual.getMessage());
     }
 
     @Test
@@ -171,7 +203,10 @@ class EntityValidatorTest {
                 .trainingDuration(INVALID_DURATION)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateTrainingForCreation(training));
+
+        assertEquals("Training duration must be positive", actual.getMessage());
     }
 
     @Test
@@ -183,7 +218,10 @@ class EntityValidatorTest {
     @Test
     @DisplayName("validateId() should throw when ID is null")
     void validateId_ShouldThrow_WhenIdIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> validator.validateId(null));
+        ValidationException actual = assertThrows(ValidationException.class,
+                () -> validator.validateId(null));
+
+        assertEquals("ID cannot be null", actual.getMessage());
     }
 
     private Trainee.TraineeBuilder<?, ?> createTraineeBuilder() {

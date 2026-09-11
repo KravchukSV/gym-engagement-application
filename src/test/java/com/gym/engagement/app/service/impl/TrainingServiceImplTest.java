@@ -82,7 +82,10 @@ class TrainingServiceImplTest {
                 .when(entityValidator)
                 .validateTrainingForCreation(SAMPLE_TRAINING);
 
-        assertThrows(IllegalArgumentException.class, () -> service.createTraining(SAMPLE_TRAINING));
+        IllegalArgumentException actual = assertThrows(IllegalArgumentException.class,
+                () -> service.createTraining(SAMPLE_TRAINING));
+
+        assertEquals("Invalid training", actual.getMessage());
     }
 
     private static Training createTraining() {
