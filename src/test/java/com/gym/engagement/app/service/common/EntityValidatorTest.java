@@ -1,5 +1,6 @@
 package com.gym.engagement.app.service.common;
 
+import com.gym.engagement.app.exception.ValidationException;
 import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.model.Training;
@@ -51,7 +52,7 @@ class EntityValidatorTest {
     @Test
     @DisplayName("validateUserForCreation() should throw when User is null")
     void validateUserForCreation_ShouldThrow_WhenUserIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForCreation(null));
+        assertThrows(ValidationException.class, () -> validator.validateUserForCreation(null));
     }
 
     @ParameterizedTest
@@ -63,7 +64,7 @@ class EntityValidatorTest {
                 .firstName(invalidName)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForCreation(trainee));
+        assertThrows(ValidationException.class, () -> validator.validateUserForCreation(trainee));
     }
 
     @ParameterizedTest
@@ -75,7 +76,7 @@ class EntityValidatorTest {
                 .lastName(invalidName)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForCreation(trainee));
+        assertThrows(ValidationException.class, () -> validator.validateUserForCreation(trainee));
     }
 
     @Test
@@ -85,7 +86,7 @@ class EntityValidatorTest {
                 .specialization(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForCreation(trainer));
+        assertThrows(ValidationException.class, () -> validator.validateUserForCreation(trainer));
     }
 
     @Test
@@ -105,7 +106,7 @@ class EntityValidatorTest {
                 .userId(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateUserForUpdate(trainee));
+        assertThrows(ValidationException.class, () -> validator.validateUserForUpdate(trainee));
     }
 
     @Test
@@ -119,7 +120,7 @@ class EntityValidatorTest {
     @Test
     @DisplayName("validateTrainingForCreation() should throw when Training is null")
     void validateTrainingForCreation_ShouldThrow_WhenTrainingIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(null));
+        assertThrows(ValidationException.class, () -> validator.validateTrainingForCreation(null));
     }
 
     @Test
@@ -129,7 +130,7 @@ class EntityValidatorTest {
                 .traineeId(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        assertThrows(ValidationException.class, () -> validator.validateTrainingForCreation(training));
     }
 
     @Test
@@ -139,7 +140,7 @@ class EntityValidatorTest {
                 .trainerId(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        assertThrows(ValidationException.class, () -> validator.validateTrainingForCreation(training));
     }
 
     @ParameterizedTest
@@ -151,7 +152,7 @@ class EntityValidatorTest {
                 .trainingName(invalidName)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        assertThrows(ValidationException.class, () -> validator.validateTrainingForCreation(training));
     }
 
     @Test
@@ -161,7 +162,7 @@ class EntityValidatorTest {
                 .trainingDate(null)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        assertThrows(ValidationException.class, () -> validator.validateTrainingForCreation(training));
     }
 
     @Test
@@ -171,7 +172,7 @@ class EntityValidatorTest {
                 .trainingDuration(INVALID_DURATION)
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> validator.validateTrainingForCreation(training));
+        assertThrows(ValidationException.class, () -> validator.validateTrainingForCreation(training));
     }
 
     @Test
@@ -183,7 +184,7 @@ class EntityValidatorTest {
     @Test
     @DisplayName("validateId() should throw when ID is null")
     void validateId_ShouldThrow_WhenIdIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> validator.validateId(null));
+        assertThrows(ValidationException.class, () -> validator.validateId(null));
     }
 
     private Trainee.TraineeBuilder<?, ?> createTraineeBuilder() {

@@ -1,5 +1,7 @@
 package com.gym.engagement.app.storage;
 
+import com.gym.engagement.app.exception.ValidationException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +13,11 @@ public abstract class AbstractStorage<ID, T> implements Storage<ID, T> {
 
     @Override
     public T save(ID id, T entity) {
-        if (id == null || entity == null) {
-            throw new IllegalArgumentException("ID and entity cannot be null");
+        if (id == null) {
+            throw new ValidationException("ID cannot be null");
+        }
+        if (entity == null) {
+            throw new ValidationException("Entity cannot be null");
         }
         storageMap.put(id, entity);
 

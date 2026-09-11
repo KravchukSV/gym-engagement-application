@@ -1,5 +1,6 @@
 package com.gym.engagement.app.storage;
 
+import com.gym.engagement.app.exception.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -36,7 +37,7 @@ class AbstractStorageTest {
 
     @Test
     void shouldRejectNullIdOnSave() {
-        Class<IllegalArgumentException> expected = IllegalArgumentException.class;
+        Class<ValidationException> expected = ValidationException.class;
 
         Executable actual = () -> storage.save(null, "Alice");
 
@@ -45,7 +46,7 @@ class AbstractStorageTest {
 
     @Test
     void shouldRejectNullEntityOnSave() {
-        Class<IllegalArgumentException> expected = IllegalArgumentException.class;
+        Class<ValidationException> expected = ValidationException.class;
 
         Executable actual = () -> storage.save("trainer-1", null);
 

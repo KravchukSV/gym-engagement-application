@@ -11,7 +11,7 @@ import lombok.extern.jackson.Jacksonized;
 @EqualsAndHashCode(callSuper = true)
 @Jacksonized
 @ToString(callSuper = true)
-public class Trainer extends  User {
+public class Trainer extends User {
 
     private final TrainingType specialization;
 
