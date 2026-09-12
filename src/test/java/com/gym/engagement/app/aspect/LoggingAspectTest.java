@@ -1,5 +1,7 @@
 package com.gym.engagement.app.aspect;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -13,6 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,6 +55,9 @@ class LoggingAspectTest {
 
     @BeforeEach
     void setUp() {
+        Logger logger = (Logger) LoggerFactory.getLogger(LoggingAspect.class);
+        logger.setLevel(Level.DEBUG);
+
         lenient().when(joinPoint.getSignature()).thenReturn(signature);
         lenient().when(proceedingJoinPoint.getSignature()).thenReturn(signature);
     }
