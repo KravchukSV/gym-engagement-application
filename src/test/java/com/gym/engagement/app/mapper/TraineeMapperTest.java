@@ -79,9 +79,18 @@ class TraineeMapperTest {
     }
 
     @Test
-    @DisplayName("Should return null when input is null")
-    void shouldReturnNullWhenInputIsNull() {
-        assertNull(mapper.toEntity(null));
-        assertNull(mapper.toDto(null));
+    @DisplayName("Should return null when TraineeDto is null")
+    void shouldReturnNullWhenDtoIsNull() {
+        Trainee actual = mapper.toEntity(null);
+
+        assertNull(actual);
+    }
+
+    @Test
+    @DisplayName("Should return null when Trainee entity is null")
+    void shouldReturnNullWhenEntityIsNull() {
+        TraineeDto actual = mapper.toDto(null);
+
+        assertNull(actual);
     }
 }

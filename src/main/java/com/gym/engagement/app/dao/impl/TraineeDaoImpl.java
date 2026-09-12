@@ -26,7 +26,7 @@ public class TraineeDaoImpl implements TraineeDao {
 
     @Override
     public Optional<Trainee> update(Long id, Trainee trainee) {
-        if(findById(id).isEmpty()) {
+        if (findById(id).isEmpty()) {
             return Optional.empty();
         }
 

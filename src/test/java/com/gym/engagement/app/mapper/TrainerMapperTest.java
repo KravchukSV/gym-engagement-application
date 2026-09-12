@@ -39,7 +39,6 @@ class TrainerMapperTest {
         TrainingTypeDto specDto = new TrainingTypeDto();
         specDto.setTrainingTypeId(SPECIALIZATION_ID);
         specDto.setTrainingTypeName(SPECIALIZATION_NAME);
-
         TrainerDto dto = new TrainerDto();
         dto.setUserId(USER_ID);
         dto.setFirstName(FIRST_NAME);
@@ -70,7 +69,6 @@ class TrainerMapperTest {
                 .trainingTypeId(SPECIALIZATION_ID)
                 .trainingTypeName(SPECIALIZATION_NAME)
                 .build();
-
         Trainer entity = Trainer.builder()
                 .userId(USER_ID)
                 .firstName(FIRST_NAME)
@@ -96,9 +94,18 @@ class TrainerMapperTest {
     }
 
     @Test
-    @DisplayName("Should return null when input is null")
-    void shouldReturnNullWhenInputIsNull() {
-        assertNull(mapper.toEntity(null));
-        assertNull(mapper.toDto(null));
+    @DisplayName("Should return null when TrainerDto is null")
+    void shouldReturnNullWhenDtoIsNull() {
+        Trainer actual = mapper.toEntity(null);
+
+        assertNull(actual);
+    }
+
+    @Test
+    @DisplayName("Should return null when Trainer entity is null")
+    void shouldReturnNullWhenEntityIsNull() {
+        TrainerDto actual = mapper.toDto(null);
+
+        assertNull(actual);
     }
 }
