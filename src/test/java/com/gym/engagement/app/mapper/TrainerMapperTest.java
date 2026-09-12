@@ -39,6 +39,7 @@ class TrainerMapperTest {
         TrainingTypeDto specDto = new TrainingTypeDto();
         specDto.setTrainingTypeId(SPECIALIZATION_ID);
         specDto.setTrainingTypeName(SPECIALIZATION_NAME);
+
         TrainerDto dto = new TrainerDto();
         dto.setUserId(USER_ID);
         dto.setFirstName(FIRST_NAME);
