@@ -3,6 +3,9 @@ package com.gym.engagement.app.facade;
 import com.gym.engagement.app.dto.TraineeDto;
 import com.gym.engagement.app.dto.TrainerDto;
 import com.gym.engagement.app.dto.TrainingDto;
+import com.gym.engagement.app.mapper.TraineeMapper;
+import com.gym.engagement.app.mapper.TrainerMapper;
+import com.gym.engagement.app.mapper.TrainingMapper;
 import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.model.Training;
@@ -10,7 +13,6 @@ import com.gym.engagement.app.service.TraineeService;
 import com.gym.engagement.app.service.TrainerService;
 import com.gym.engagement.app.service.TrainingService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,20 +25,22 @@ public class GymFacade {
     private final TraineeService traineeService;
     private final TrainerService trainerService;
     private final TrainingService trainingService;
-    private final ModelMapper modelMapper;
+    private final TraineeMapper traineeMapper;
+    private final TrainerMapper trainerMapper;
+    private final TrainingMapper trainingMapper;
 
     public TraineeDto createTrainee(TraineeDto traineeDto) {
-        Trainee trainee = modelMapper.map(traineeDto, Trainee.class);
+        Trainee trainee = traineeMapper.toEntity(traineeDto);
         Trainee savedTrainee = traineeService.saveTrainee(trainee);
 
-        return modelMapper.map(savedTrainee, TraineeDto.class);
+        return traineeMapper.toDto(savedTrainee);
     }
 
     public TraineeDto updateTrainee(TraineeDto traineeDto) {
-        Trainee trainee = modelMapper.map(traineeDto, Trainee.class);
+        Trainee trainee = traineeMapper.toEntity(traineeDto);
         Trainee updatedTrainee = traineeService.updateTrainee(trainee);
 
-        return modelMapper.map(updatedTrainee, TraineeDto.class);
+        return traineeMapper.toDto(updatedTrainee);
     }
 
     public void deleteTrainee(Long id) {
@@ -46,63 +50,63 @@ public class GymFacade {
     public Optional<TraineeDto> findTraineeById(Long id) {
         Optional<Trainee> trainee = traineeService.findTraineeById(id);
 
-        return trainee.map(t -> modelMapper.map(t, TraineeDto.class));
+        return trainee.map(traineeMapper::toDto);
     }
 
     public List<TraineeDto> findAllTrainees() {
         List<Trainee> trainees = traineeService.findAllTrainees();
 
         return trainees.stream()
-                .map(trainee -> modelMapper.map(trainee, TraineeDto.class))
+                .map(traineeMapper::toDto)
                 .toList();
     }
 
     public TrainerDto createTrainer(TrainerDto trainerDto) {
-        Trainer trainer = modelMapper.map(trainerDto, Trainer.class);
+        Trainer trainer = trainerMapper.toEntity(trainerDto);
         Trainer savedTrainer = trainerService.createTrainer(trainer);
 
-        return modelMapper.map(savedTrainer, TrainerDto.class);
+        return trainerMapper.toDto(savedTrainer);
     }
 
     public TrainerDto updateTrainer(TrainerDto trainerDto) {
-        Trainer trainer = modelMapper.map(trainerDto, Trainer.class);
+        Trainer trainer = trainerMapper.toEntity(trainerDto);
         Trainer updatedTrainer = trainerService.updateTrainer(trainer);
 
-        return modelMapper.map(updatedTrainer, TrainerDto.class);
+        return trainerMapper.toDto(updatedTrainer);
     }
 
     public Optional<TrainerDto> findTrainerById(Long id) {
         Optional<Trainer> trainer = trainerService.findTrainerById(id);
 
-        return trainer.map(t -> modelMapper.map(t, TrainerDto.class));
+        return trainer.map(trainerMapper::toDto);
     }
 
     public List<TrainerDto> findAllTrainers() {
         List<Trainer> trainers = trainerService.findAllTrainers();
 
         return trainers.stream()
-                .map(trainer -> modelMapper.map(trainer, TrainerDto.class))
+                .map(trainerMapper::toDto)
                 .toList();
     }
 
     public TrainingDto createTraining(TrainingDto trainingDto) {
-        Training training = modelMapper.map(trainingDto, Training.class);
+        Training training = trainingMapper.toEntity(trainingDto);
         Training savedTraining = trainingService.createTraining(training);
 
-        return modelMapper.map(savedTraining, TrainingDto.class);
+        return trainingMapper.toDto(savedTraining);
     }
 
     public Optional<TrainingDto> findTrainingById(Long id) {
         Optional<Training> training = trainingService.findTrainingById(id);
 
-        return training.map(t -> modelMapper.map(t, TrainingDto.class));
+        return training.map(trainingMapper::toDto);
     }
 
     public List<TrainingDto> findAllTrainings() {
         List<Training> trainings = trainingService.findAllTrainings();
 
         return trainings.stream()
-                .map(training -> modelMapper.map(training, TrainingDto.class))
+                .map(trainingMapper::toDto)
                 .toList();
     }
 }

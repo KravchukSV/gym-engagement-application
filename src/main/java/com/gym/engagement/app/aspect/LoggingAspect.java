@@ -81,7 +81,7 @@ public class LoggingAspect {
         String className = joinPoint.getSignature().getDeclaringTypeName();
         String methodName = joinPoint.getSignature().getName();
 
-        log.warn("Exception in {}.{}() with message = '{}'", className, methodName, ex.getMessage(), ex);
+        log.error("Exception in {}.{}() with message = '{}'", className, methodName, ex.getMessage(), ex);
     }
 
     private String determineBusinessAction(String methodName) {

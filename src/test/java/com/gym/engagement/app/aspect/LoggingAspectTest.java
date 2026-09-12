@@ -89,6 +89,7 @@ class LoggingAspectTest {
 
         RuntimeException actual = assertThrows(RuntimeException.class,
                 () -> aspect.logTimeAndDebug(proceedingJoinPoint));
+
         assertEquals(ERROR_MESSAGE, actual.getMessage());
     }
 
