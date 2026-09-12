@@ -3,6 +3,9 @@ package com.gym.engagement.app.facade;
 import com.gym.engagement.app.dto.TraineeDto;
 import com.gym.engagement.app.dto.TrainerDto;
 import com.gym.engagement.app.dto.TrainingDto;
+import com.gym.engagement.app.mapper.TraineeMapper;
+import com.gym.engagement.app.mapper.TrainerMapper;
+import com.gym.engagement.app.mapper.TrainingMapper;
 import com.gym.engagement.app.model.Trainee;
 import com.gym.engagement.app.model.Trainer;
 import com.gym.engagement.app.model.Training;
@@ -15,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +55,11 @@ class GymFacadeTest {
     private TrainingService trainingService;
 
     @Mock
-    private ModelMapper modelMapper;
+    private TraineeMapper traineeMapper;
+    @Mock
+    private TrainerMapper trainerMapper;
+    @Mock
+    private TrainingMapper trainingMapper;
 
     @InjectMocks
     private GymFacade facade;
@@ -61,31 +67,31 @@ class GymFacadeTest {
     @Test
     @DisplayName("createTrainee should map DTO, save entity and return DTO")
     void createTrainee_ShouldMapSaveAndReturnDto() {
-        when(modelMapper.map(TRAINEE_DTO, Trainee.class)).thenReturn(TRAINEE);
+        when(traineeMapper.toEntity(TRAINEE_DTO)).thenReturn(TRAINEE);
         when(traineeService.saveTrainee(TRAINEE)).thenReturn(TRAINEE);
-        when(modelMapper.map(TRAINEE, TraineeDto.class)).thenReturn(TRAINEE_DTO);
+        when(traineeMapper.toDto(TRAINEE)).thenReturn(TRAINEE_DTO);
 
         TraineeDto actual = facade.createTrainee(TRAINEE_DTO);
 
         assertEquals(TRAINEE_DTO, actual);
-        verify(modelMapper).map(TRAINEE_DTO, Trainee.class);
+        verify(traineeMapper).toEntity(TRAINEE_DTO);
         verify(traineeService).saveTrainee(TRAINEE);
-        verify(modelMapper).map(TRAINEE, TraineeDto.class);
+        verify(traineeMapper).toDto(TRAINEE);
     }
 
     @Test
     @DisplayName("updateTrainee should map DTO, update entity and return DTO")
     void updateTrainee_ShouldMapUpdateAndReturnDto() {
-        when(modelMapper.map(TRAINEE_DTO, Trainee.class)).thenReturn(TRAINEE);
+        when(traineeMapper.toEntity(TRAINEE_DTO)).thenReturn(TRAINEE);
         when(traineeService.updateTrainee(TRAINEE)).thenReturn(TRAINEE);
-        when(modelMapper.map(TRAINEE, TraineeDto.class)).thenReturn(TRAINEE_DTO);
+        when(traineeMapper.toDto(TRAINEE)).thenReturn(TRAINEE_DTO);
 
         TraineeDto actual = facade.updateTrainee(TRAINEE_DTO);
 
         assertEquals(TRAINEE_DTO, actual);
-        verify(modelMapper).map(TRAINEE_DTO, Trainee.class);
+        verify(traineeMapper).toEntity(TRAINEE_DTO);
         verify(traineeService).updateTrainee(TRAINEE);
-        verify(modelMapper).map(TRAINEE, TraineeDto.class);
+        verify(traineeMapper).toDto(TRAINEE);
     }
 
     @Test
@@ -94,21 +100,21 @@ class GymFacadeTest {
         facade.deleteTrainee(TRAINEE_ID);
 
         verify(traineeService).deleteTrainee(TRAINEE_ID);
-        verifyNoInteractions(modelMapper);
+        verifyNoInteractions(traineeMapper);
     }
 
     @Test
     @DisplayName("findTraineeById should return DTO when trainee exists")
     void findTraineeById_WhenExists_ShouldReturnDto() {
         when(traineeService.findTraineeById(TRAINEE_ID)).thenReturn(Optional.of(TRAINEE));
-        when(modelMapper.map(TRAINEE, TraineeDto.class)).thenReturn(TRAINEE_DTO);
+        when(traineeMapper.toDto(TRAINEE)).thenReturn(TRAINEE_DTO);
 
         Optional<TraineeDto> actual = facade.findTraineeById(TRAINEE_ID);
 
         assertTrue(actual.isPresent());
         assertEquals(TRAINEE_DTO, actual.get());
         verify(traineeService).findTraineeById(TRAINEE_ID);
-        verify(modelMapper).map(TRAINEE, TraineeDto.class);
+        verify(traineeMapper).toDto(TRAINEE);
     }
 
     @Test
@@ -120,64 +126,64 @@ class GymFacadeTest {
 
         assertTrue(actual.isEmpty());
         verify(traineeService).findTraineeById(TRAINEE_ID);
-        verifyNoInteractions(modelMapper);
+        verifyNoInteractions(traineeMapper);
     }
 
     @Test
     @DisplayName("findAllTrainees should return mapped DTOs")
     void findAllTrainees_ShouldReturnMappedDtos() {
         when(traineeService.findAllTrainees()).thenReturn(List.of(TRAINEE));
-        when(modelMapper.map(TRAINEE, TraineeDto.class)).thenReturn(TRAINEE_DTO);
+        when(traineeMapper.toDto(TRAINEE)).thenReturn(TRAINEE_DTO);
 
         List<TraineeDto> actual = facade.findAllTrainees();
 
         assertEquals(List.of(TRAINEE_DTO), actual);
         verify(traineeService).findAllTrainees();
-        verify(modelMapper).map(TRAINEE, TraineeDto.class);
+        verify(traineeMapper).toDto(TRAINEE);
     }
 
     @Test
     @DisplayName("createTrainer should map DTO, save entity and return DTO")
     void createTrainer_ShouldMapSaveAndReturnDto() {
-        when(modelMapper.map(TRAINER_DTO, Trainer.class)).thenReturn(TRAINER);
+        when(trainerMapper.toEntity(TRAINER_DTO)).thenReturn(TRAINER);
         when(trainerService.createTrainer(TRAINER)).thenReturn(TRAINER);
-        when(modelMapper.map(TRAINER, TrainerDto.class)).thenReturn(TRAINER_DTO);
+        when(trainerMapper.toDto(TRAINER)).thenReturn(TRAINER_DTO);
 
         TrainerDto actual = facade.createTrainer(TRAINER_DTO);
 
         assertEquals(TRAINER_DTO, actual);
-        verify(modelMapper).map(TRAINER_DTO, Trainer.class);
+        verify(trainerMapper).toEntity(TRAINER_DTO);
         verify(trainerService).createTrainer(TRAINER);
-        verify(modelMapper).map(TRAINER, TrainerDto.class);
+        verify(trainerMapper).toDto(TRAINER);
     }
 
     @Test
     @DisplayName("updateTrainer should map DTO, update entity and return DTO")
     void updateTrainer_ShouldMapUpdateAndReturnDto() {
-        when(modelMapper.map(TRAINER_DTO, Trainer.class)).thenReturn(TRAINER);
+        when(trainerMapper.toEntity(TRAINER_DTO)).thenReturn(TRAINER);
         when(trainerService.updateTrainer(TRAINER)).thenReturn(TRAINER);
-        when(modelMapper.map(TRAINER, TrainerDto.class)).thenReturn(TRAINER_DTO);
+        when(trainerMapper.toDto(TRAINER)).thenReturn(TRAINER_DTO);
 
         TrainerDto actual = facade.updateTrainer(TRAINER_DTO);
 
         assertEquals(TRAINER_DTO, actual);
-        verify(modelMapper).map(TRAINER_DTO, Trainer.class);
+        verify(trainerMapper).toEntity(TRAINER_DTO);
         verify(trainerService).updateTrainer(TRAINER);
-        verify(modelMapper).map(TRAINER, TrainerDto.class);
+        verify(trainerMapper).toDto(TRAINER);
     }
 
     @Test
     @DisplayName("findTrainerById should return DTO when trainer exists")
     void findTrainerById_WhenExists_ShouldReturnDto() {
         when(trainerService.findTrainerById(TRAINER_ID)).thenReturn(Optional.of(TRAINER));
-        when(modelMapper.map(TRAINER, TrainerDto.class)).thenReturn(TRAINER_DTO);
+        when(trainerMapper.toDto(TRAINER)).thenReturn(TRAINER_DTO);
 
         Optional<TrainerDto> actual = facade.findTrainerById(TRAINER_ID);
 
         assertTrue(actual.isPresent());
         assertEquals(TRAINER_DTO, actual.get());
         verify(trainerService).findTrainerById(TRAINER_ID);
-        verify(modelMapper).map(TRAINER, TrainerDto.class);
+        verify(trainerMapper).toDto(TRAINER);
     }
 
     @Test
@@ -189,49 +195,49 @@ class GymFacadeTest {
 
         assertTrue(actual.isEmpty());
         verify(trainerService).findTrainerById(TRAINER_ID);
-        verifyNoInteractions(modelMapper);
+        verifyNoInteractions(trainerMapper);
     }
 
     @Test
     @DisplayName("findAllTrainers should return mapped DTOs")
     void findAllTrainers_ShouldReturnMappedDtos() {
         when(trainerService.findAllTrainers()).thenReturn(List.of(TRAINER));
-        when(modelMapper.map(TRAINER, TrainerDto.class)).thenReturn(TRAINER_DTO);
+        when(trainerMapper.toDto(TRAINER)).thenReturn(TRAINER_DTO);
 
         List<TrainerDto> actual = facade.findAllTrainers();
 
         assertEquals(List.of(TRAINER_DTO), actual);
         verify(trainerService).findAllTrainers();
-        verify(modelMapper).map(TRAINER, TrainerDto.class);
+        verify(trainerMapper).toDto(TRAINER);
     }
 
     @Test
     @DisplayName("createTraining should map DTO, save entity and return DTO")
     void createTraining_ShouldMapSaveAndReturnDto() {
-        when(modelMapper.map(TRAINING_DTO, Training.class)).thenReturn(TRAINING);
+        when(trainingMapper.toEntity(TRAINING_DTO)).thenReturn(TRAINING);
         when(trainingService.createTraining(TRAINING)).thenReturn(TRAINING);
-        when(modelMapper.map(TRAINING, TrainingDto.class)).thenReturn(TRAINING_DTO);
+        when(trainingMapper.toDto(TRAINING)).thenReturn(TRAINING_DTO);
 
         TrainingDto actual = facade.createTraining(TRAINING_DTO);
 
         assertEquals(TRAINING_DTO, actual);
-        verify(modelMapper).map(TRAINING_DTO, Training.class);
+        verify(trainingMapper).toEntity(TRAINING_DTO);
         verify(trainingService).createTraining(TRAINING);
-        verify(modelMapper).map(TRAINING, TrainingDto.class);
+        verify(trainingMapper).toDto(TRAINING);
     }
 
     @Test
     @DisplayName("findTrainingById should return DTO when training exists")
     void findTrainingById_WhenExists_ShouldReturnDto() {
         when(trainingService.findTrainingById(TRAINING_ID)).thenReturn(Optional.of(TRAINING));
-        when(modelMapper.map(TRAINING, TrainingDto.class)).thenReturn(TRAINING_DTO);
+        when(trainingMapper.toDto(TRAINING)).thenReturn(TRAINING_DTO);
 
         Optional<TrainingDto> actual = facade.findTrainingById(TRAINING_ID);
 
         assertTrue(actual.isPresent());
         assertEquals(TRAINING_DTO, actual.get());
         verify(trainingService).findTrainingById(TRAINING_ID);
-        verify(modelMapper).map(TRAINING, TrainingDto.class);
+        verify(trainingMapper).toDto(TRAINING);
     }
 
     @Test
@@ -243,20 +249,20 @@ class GymFacadeTest {
 
         assertTrue(actual.isEmpty());
         verify(trainingService).findTrainingById(TRAINING_ID);
-        verifyNoInteractions(modelMapper);
+        verifyNoInteractions(trainingMapper);
     }
 
     @Test
     @DisplayName("findAllTrainings should return mapped DTOs")
     void findAllTrainings_ShouldReturnMappedDto() {
         when(trainingService.findAllTrainings()).thenReturn(List.of(TRAINING));
-        when(modelMapper.map(TRAINING, TrainingDto.class)).thenReturn(TRAINING_DTO);
+        when(trainingMapper.toDto(TRAINING)).thenReturn(TRAINING_DTO);
 
         List<TrainingDto> actual = facade.findAllTrainings();
 
         assertEquals(List.of(TRAINING_DTO), actual);
         verify(trainingService).findAllTrainings();
-        verify(modelMapper).map(TRAINING, TrainingDto.class);
+        verify(trainingMapper).toDto(TRAINING);
     }
 
     private static Trainee createTrainee() {
