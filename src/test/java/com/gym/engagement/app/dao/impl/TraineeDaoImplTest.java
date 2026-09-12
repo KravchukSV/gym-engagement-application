@@ -54,6 +54,7 @@ class TraineeDaoImplTest {
         Optional<Trainee> expected = Optional.of(trainee);
 
         when(traineeStorage.save(1L, trainee)).thenReturn(trainee);
+        when(traineeStorage.findById(1L)).thenReturn(Optional.of(trainee));
 
         Optional<Trainee> actual = dao.update(1L, trainee);
 
@@ -65,9 +66,22 @@ class TraineeDaoImplTest {
     @DisplayName("update() should return Optional.empty() when storage returns null")
     void update_ShouldReturnEmptyOptional_WhenStorageReturnsNull() {
         Trainee trainee = Trainee.builder().userId(1L).build();
+
         when(traineeStorage.save(1L, trainee)).thenReturn(null);
+        when(traineeStorage.findById(1L)).thenReturn(Optional.of(trainee));
 
         Optional<Trainee> actual = dao.update(1L, trainee);
+
+        assertEquals(Optional.empty(), actual);
+    }
+
+    @Test
+    @DisplayName("update() should return Optional.empty() when trainee does not exist")
+    void update_ShouldReturnEmptyOptional_WhenTraineeNotFound() {
+        Trainee trainee = Trainee.builder().userId(2L).build();
+        when(traineeStorage.findById(2L)).thenReturn(Optional.empty());
+
+        Optional<Trainee> actual = dao.update(2L, trainee);
 
         assertEquals(Optional.empty(), actual);
     }

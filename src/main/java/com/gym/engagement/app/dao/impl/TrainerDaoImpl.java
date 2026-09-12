@@ -26,6 +26,10 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public Optional<Trainer> update(Long id, Trainer trainer) {
+        if (findById(id).isEmpty()) {
+            return Optional.empty();
+        }
+
         return Optional.ofNullable(trainerStorage.save(id, trainer));
     }
 

@@ -26,6 +26,10 @@ public class TraineeDaoImpl implements TraineeDao {
 
     @Override
     public Optional<Trainee> update(Long id, Trainee trainee) {
+        if(findById(id).isEmpty()) {
+            return Optional.empty();
+        }
+
         return Optional.ofNullable(traineeStorage.save(id, trainee));
     }
 
