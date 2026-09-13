@@ -68,14 +68,14 @@ class GymFacadeTest {
     @DisplayName("createTrainee should map DTO, save entity and return DTO")
     void createTrainee_ShouldMapSaveAndReturnDto() {
         when(traineeMapper.toEntity(TRAINEE_DTO)).thenReturn(TRAINEE);
-        when(traineeService.saveTrainee(TRAINEE)).thenReturn(TRAINEE);
+        when(traineeService.createTrainee(TRAINEE)).thenReturn(TRAINEE);
         when(traineeMapper.toDto(TRAINEE)).thenReturn(TRAINEE_DTO);
 
         TraineeDto actual = facade.createTrainee(TRAINEE_DTO);
 
         assertEquals(TRAINEE_DTO, actual);
         verify(traineeMapper).toEntity(TRAINEE_DTO);
-        verify(traineeService).saveTrainee(TRAINEE);
+        verify(traineeService).createTrainee(TRAINEE);
         verify(traineeMapper).toDto(TRAINEE);
     }
 

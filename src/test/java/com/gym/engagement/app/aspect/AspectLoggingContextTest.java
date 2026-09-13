@@ -83,7 +83,7 @@ class AspectLoggingContextTest {
         when(passwordEncoder.encode(PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(traineeDao.save(any(Trainee.class))).thenReturn(savedTrainee);
 
-        proxyService.saveTrainee(inputTrainee);
+        proxyService.createTrainee(inputTrainee);
 
         assertThat(logAppender.list)
                 .hasSize(1)

@@ -45,9 +45,14 @@ public class TrainerServiceImpl implements TrainerService {
     public Trainer createTrainer(Trainer trainer) {
         entityValidator.validateUserForCreation(trainer);
 
-        trainer = createTrainerWithCredentials(trainer);
+        String password = credentialsGenerator.generatePassword();
 
-        return trainerDao.save(trainer);
+        trainer = createTrainerWithCredentials(trainer, passwordEncoder.encode(password));
+        Trainer savedTrainer = trainerDao.save(trainer);
+
+        return savedTrainer.toBuilder()
+                .password(password)
+                .build();
     }
 
     @Override
@@ -71,10 +76,8 @@ public class TrainerServiceImpl implements TrainerService {
         return trainerDao.findAll();
     }
 
-    private Trainer createTrainerWithCredentials(Trainer trainer) {
+    private Trainer createTrainerWithCredentials(Trainer trainer, String encodedPassword) {
         String username = credentialsGenerator.generateUsername(trainer.getFirstName(), trainer.getLastName());
-        String password = credentialsGenerator.generatePassword();
-        String encodedPassword = passwordEncoder.encode(password);
 
         return trainer.toBuilder()
                 .username(username)

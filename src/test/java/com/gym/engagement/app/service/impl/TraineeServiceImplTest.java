@@ -68,7 +68,7 @@ class TraineeServiceImplTest {
         when(passwordEncoder.encode(GENERATED_PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(traineeDao.save(any(Trainee.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Trainee actual = service.saveTrainee(sampleTrainee);
+        Trainee actual = service.createTrainee(sampleTrainee);
 
         verify(entityValidator).validateUserForCreation(sampleTrainee);
         verify(credentialsGenerator).generateUsername(FIRST_NAME, LAST_NAME);
@@ -76,7 +76,7 @@ class TraineeServiceImplTest {
         verify(passwordEncoder).encode(GENERATED_PASSWORD);
         verify(traineeDao).save(any(Trainee.class));
         assertEquals(GENERATED_USERNAME, actual.getUsername());
-        assertEquals(ENCODED_PASSWORD, actual.getPassword());
+        assertEquals(GENERATED_PASSWORD, actual.getPassword());
         assertEquals(FIRST_NAME, actual.getFirstName());
         assertEquals(LAST_NAME, actual.getLastName());
         assertEquals(ADDRESS, actual.getAddress());
@@ -157,7 +157,7 @@ class TraineeServiceImplTest {
                 .validateUserForCreation(sampleTrainee);
 
         IllegalArgumentException actual = assertThrows(IllegalArgumentException.class,
-                () -> service.saveTrainee(sampleTrainee));
+                () -> service.createTrainee(sampleTrainee));
 
         assertEquals("Invalid user", actual.getMessage());
         verify(entityValidator).validateUserForCreation(sampleTrainee);
