@@ -74,7 +74,7 @@ class TrainerServiceImplTest {
         verify(passwordEncoder).encode(GENERATED_PASSWORD);
         verify(trainerDao).save(any(Trainer.class));
         assertEquals(GENERATED_USERNAME, actual.getUsername());
-        assertEquals(ENCODED_PASSWORD, actual.getPassword());
+        assertEquals(GENERATED_PASSWORD, actual.getPassword());
     }
 
     @Test

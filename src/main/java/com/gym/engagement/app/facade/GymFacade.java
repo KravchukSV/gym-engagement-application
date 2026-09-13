@@ -31,7 +31,7 @@ public class GymFacade {
 
     public TraineeDto createTrainee(TraineeDto traineeDto) {
         Trainee trainee = traineeMapper.toEntity(traineeDto);
-        Trainee savedTrainee = traineeService.saveTrainee(trainee);
+        Trainee savedTrainee = traineeService.createTrainee(trainee);
 
         return traineeMapper.toDto(savedTrainee);
     }

@@ -42,12 +42,17 @@ public class TraineeServiceImpl implements TraineeService {
     }
 
     @Override
-    public Trainee saveTrainee(Trainee trainee) {
+    public Trainee createTrainee(Trainee trainee) {
         entityValidator.validateUserForCreation(trainee);
 
-        trainee = createTraineeWithCredentials(trainee);
+        String password = credentialsGenerator.generatePassword();
 
-        return traineeDao.save(trainee);
+        trainee = createTraineeWithCredentials(trainee, passwordEncoder.encode(password));
+        Trainee savedTrainee = traineeDao.save(trainee);
+
+        return savedTrainee.toBuilder()
+                .password(password)
+                .build();
     }
 
     @Override
@@ -78,10 +83,8 @@ public class TraineeServiceImpl implements TraineeService {
         return traineeDao.findAll();
     }
 
-    private Trainee createTraineeWithCredentials(Trainee trainee) {
+    private Trainee createTraineeWithCredentials(Trainee trainee, String encodedPassword) {
         String username = credentialsGenerator.generateUsername(trainee.getFirstName(), trainee.getLastName());
-        String password = credentialsGenerator.generatePassword();
-        String encodedPassword = passwordEncoder.encode(password);
 
         return trainee.toBuilder()
                 .username(username)
